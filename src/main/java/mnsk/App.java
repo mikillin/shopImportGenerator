@@ -24,7 +24,7 @@ public class App {
     public final static String CSV_SEPARATOR = ";";
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
-    public static int BEGIN_ARTICLE_NUMBER = 12550;
+    public static int BEGIN_ARTICLE_NUMBER = 13550;
 
     public static String url = "jdbc:mysql://localhost:3306/furniture";
     public  static String username = "admin";

@@ -11,6 +11,7 @@ public class ProductImporter {
 
 
     public static final String DEFAULT_STATUS_ON = "1";
+    public static final String DEFAULT_STATUS_OFF = "0";
     public static final String DEFAULT_USTANOVKA = "Возможна рассрочка";
     public static final String DEFAULT_DOSTAVKA = "2-25 дней";
 

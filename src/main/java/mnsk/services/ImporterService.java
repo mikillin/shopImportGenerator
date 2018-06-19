@@ -9,6 +9,9 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Author: S.Rogachevsky
@@ -66,17 +69,14 @@ public abstract class ImporterService {
     }
 
 
-
-
-
     public static Document getHTMLDocument(String htmlLink) {
-     Document doc = null;
+        Document doc = null;
         try {
             doc = Jsoup.connect(htmlLink).get();
         } catch (java.lang.NullPointerException npe) {
             System.err.println(">>>>" + htmlLink);
             npe.printStackTrace();
-        } catch (org.jsoup.HttpStatusException ex)    {
+        } catch (org.jsoup.HttpStatusException ex) {
             ex.printStackTrace();
             System.err.println(">>>>" + htmlLink);
         } catch (IOException e) {
@@ -93,7 +93,6 @@ public abstract class ImporterService {
         String imageFileName;
         URL url;
         URLConnection conn;
-
 
 
         imageFileName = String.valueOf(App.BEGIN_ARTICLE_NUMBER) + (addPart ? "-" + imageLinksCount : "") + App.SAVED_FILES_EXTENSION;
@@ -133,9 +132,19 @@ public abstract class ImporterService {
 
         imageFileName = String.valueOf(App.BEGIN_ARTICLE_NUMBER) + App.SAVED_FILES_EXTENSION;
 
+        if (!link.startsWith("http"))
+            link = "http:" + link;
+
         try {
 
-            url = new URL(link); //Формирование url-адреса файла
+
+
+            try(InputStream in = new URL(link).openStream()){
+                Files.copy(in, Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+
+           /* url = new URL(link); //Формирование url-адреса файла
             conn = url.openConnection();
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -149,7 +158,7 @@ public abstract class ImporterService {
             }
             bis.close();
             fos.flush();
-            fos.close();
+            fos.close();*/
 
         } catch (IOException e) {
             System.err.println("Link : " + link);
@@ -158,9 +167,6 @@ public abstract class ImporterService {
 
         return App.IMAGE_FILE_PATH + imageFileName;
     }
-
-
-
 
 
 }

@@ -26,7 +26,7 @@ import java.util.Set;
  */
 public class BftService extends ImporterService {
     private final static String FILE_SOURCE = "C:\\data.csv";
-    private final static String SEARCH_URL = "http://bft.by/rezultaty-poiska.html?search=";
+    private final static String SEARCH_URL = "https://bft.by/catalog/?q=";
     private final static int PRODUCT_CODE_SOURCE_CSV_INDEX = 0;
     public static final String BASE_BFT_URL = "http://bft.by/";
     public static final String PRODUCT_ONLY_PATTERN = ".*[\\d].*";
