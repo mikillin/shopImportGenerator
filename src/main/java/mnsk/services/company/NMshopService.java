@@ -1,7 +1,8 @@
-package mnsk.services;
+package mnsk.services.company;
 
-import mnsk.beans.ImportNode;
-import mnsk.beans.ProductImporter;
+import mnsk.beans.export.ImportNode;
+import mnsk.beans.export.ProductImporter;
+import mnsk.services.ImporterService;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

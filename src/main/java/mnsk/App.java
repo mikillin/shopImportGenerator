@@ -1,9 +1,11 @@
 package mnsk;
 
-import mnsk.beans.ImportNode;
-import mnsk.beans.ProductImporter;
-import mnsk.services.BftService;
+import mnsk.beans.export.ImportNode;
+import mnsk.beans.export.ProductImporter;
+import mnsk.services.company.BftService;
 import mnsk.services.ImporterService;
+import mnsk.services.company.LoadAllBftProductsService;
+import mnsk.services.company.MebelDeloService;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,34 +17,44 @@ import java.util.Scanner;
 /**
  * before using this app download prices from DB
  */
+
+//todo: upload data from source file.
+// search and compare with database
+
 public class App {
     public static final String SAVED_FILES_EXTENSION = ".jpg";
 
-    public final static String FILE_EXPORT_FIRST = "c:\\shop\\shop\\1.csv";
-    public final static String FILE_EXPORT_SECOND = "c:\\shop\\shop\\2.csv";
+    public final static String FILE_EXPORT_FIRST = "c:\\work\\shop\\1.csv";
+    public final static String FILE_EXPORT_SECOND = "c:\\work\\shop\\2.csv";
 
     public final static String CSV_SEPARATOR = ";";
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
-    public static int BEGIN_ARTICLE_NUMBER = 13550;
+    public static int BEGIN_ARTICLE_NUMBER = 3000;
 
-    public static String url = "jdbc:mysql://localhost:3306/furniture";
-    public  static String username = "admin";
-    public  static String password = "admin";
+    public static String url = "jdbc:mysql://localhost:3306/shop";
+    public static String username = "root";
+    public static String password = "admin";
     // static String sourceFile = "c:/ready/XXX-2.csv";
-    static String sourceFile = "c:/ready/xxx-3.csv ";
-    static String sourceFileCodes = "c:/test/codes.csv";
-    static String sourceFileBFTCSV = "c:/ready/correctPrices.csv ";
+    static String sourceFile = "c:\\work\\shop\\ready\\xxx-3.csv ";
+    static String sourceFileCodes = "c:\\work\\shop\\ready\\codes.csv";
+    static String sourceDataFromDB = "c:\\work\\shop\\furniture.csv";
+    static String sourceFileBFTCSV = "c:\\work\\shop\\bft.csv";
+    static String[] sourceFilesBFTCSV = {"c:\\work\\shop\\Signal-24.02.csv",
+            "c:\\work\\shop\\Halmar-24.02.csv"};
     //static String sourceFileBFTCSV = "c:/ready/testbft.csv ";
     static int skuBegin = 0;
 
     public static void main(String[] args) {
-        updateLastSKU(); //obligatory
+        allSignalHalmarItems();
+        //MebelDeloService.getProductData();
+        //importMainData();
+        //updateLastSKU(); //obligatory
         //  importMainData("common");
         //   updateSpecialIDs("common");
         //     updateBFTPrices("common");
         //exportDataTOFileSignalHalmar();
-        createNewListOFProductsBFT();
+        // - createNewListOFProductsBFT();
     }
 
     static void updateLastSKU() {
@@ -90,15 +102,30 @@ public class App {
         } catch (IOException exc) {
             System.out.println("Err: " + exc);
         } catch (
-                SQLException exc)
-
-        {
+                SQLException exc) {
             System.out.println("Err: " + exc);
         }
 
         System.out.println("Hello!");
 
 
+    }
+
+    static void allSignalHalmarItems() {
+        try {
+
+            //for (String fileName : sourceFilesBFTCSV) {
+
+                Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
+                scanner.nextLine(); // pass 1 top column description row
+
+                ImporterService is = new LoadAllBftProductsService();
+                is.getData();
+
+            //}
+        } catch (IOException e2xc) {
+            System.out.println(e2xc);
+        }
     }
 
     static void newSignalHalmarItems() {
@@ -218,20 +245,25 @@ public class App {
         }
     }
 
-    static void importMainData(String siteAbbreviation) {
+    static void importMainData() {
         String test = "", query = "";
 
         try {
-            Scanner scanner = new Scanner(new File(sourceFile));
+            Scanner scanner = new Scanner(new File(sourceDataFromDB));
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement stmt = connection.createStatement();
+
+            //clear all data
+            query = "TRUNCATE TABLE FURNITURE";
+            stmt.executeUpdate(query);
+
             String[] data;
             scanner.nextLine(); // pass 1 top column description row
             while (scanner.hasNextLine()) {
                 test = scanner.nextLine();
-                while (test.indexOf("public://") == -1 && scanner.hasNextLine()) {
-                    test += scanner.nextLine();//why doesn't it work
-                }
+//                while (test.indexOf("public://") == -1 && scanner.hasNextLine()) {
+//                    test += scanner.nextLine();//why doesn't it work
+//                }
                 data = test.split(";", -1);
 
                 try {
@@ -241,14 +273,14 @@ public class App {
                                     "(" +
                                     "sku, " +
                                     "name," +
-                                    " cost, " +
+                                    "cost, " +
                                     "currency, " +
                                     "vendor, " +
                                     "category, " +
                                     "subcategory," +
                                     "material, " +
                                     "type, " +
-                                    "description, " +
+                                    //"description, " +
                                     "image, " +
                                     "status, " +
                                     "budget,  " +
@@ -266,8 +298,8 @@ public class App {
                                     getValue(data[6]) + ", " + //subcat
                                     getValue(data[7]) + ", " +
                                     getValue(data[8]) + ", " +
-                                    getValue(data[9]) + ", " +
-                                    getValue(data[10]).replaceAll("_7.jpg", ".jpg")
+                                    //   getValue(data[9]) + ", " + //description
+                                    getValue(data[9]).replaceAll("_7.jpg", ".jpg")
                                             .replaceAll("_6.jpg", ".jpg")
                                             .replaceAll("_5.jpg", ".jpg")
                                             .replaceAll("_4.jpg", ".jpg")
@@ -275,12 +307,12 @@ public class App {
                                             .replaceAll("_2.jpg", ".jpg")
                                             .replaceAll("_1.jpg", ".jpg")
                                             .replaceAll("_0.jpg", ".jpg") + ", " + /// image
-                                    getValue(data[11]) + ", " +
-                                    (data[12] == null || data[12].equals("") ? "0" : "1") + ", " + //budget
+                                    getValue(data[10]) + ", " +
+                                    (data[11] == null || data[11].equals("") ? "0" : "1") + ", " + //budget
+                                    getValue(data[12]) + ", " +
                                     getValue(data[13]) + ", " +
                                     getValue(data[14]) + ", " +
-                                    getValue(data[15]) + ", " +
-                                    getValue(data[16]) + ")";
+                                    getValue(data[15]) + ")";
                     //System.out.println("output query: " + query);
 
                 } catch (ArrayIndexOutOfBoundsException exc) {
@@ -301,7 +333,7 @@ public class App {
     static void updateSpecialIDs(String siteAbbreviation) {
         String test = "", query = "";
         try {
-            Scanner scanner = new Scanner(new File(sourceFileCodes));
+            Scanner scanner = new Scanner(new File(sourceDataFromDB));
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement stmt = connection.createStatement();
             String[] data;

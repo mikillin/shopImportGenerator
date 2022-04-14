@@ -1,0 +1,6 @@
+mnsk\App.class
+mnsk\services\parser\BFTParser.class
+mnsk\ImportFileGenerator.class
+mnsk\services\ImporterService.class
+mnsk\App$1.class
+mnsk\App$2.class

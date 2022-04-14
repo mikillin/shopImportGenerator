@@ -1,0 +1,13 @@
+C:\git\shopImportGenerator\src\main\java\mnsk\App.java
+C:\git\shopImportGenerator\src\main\java\mnsk\beans\Furniture.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\company\DomBYService.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\ImporterService.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\DBImportService.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\company\BftService.java
+C:\git\shopImportGenerator\src\main\java\mnsk\beans\export\ProductImporter.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\company\HalmarService.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\company\MekoService.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\company\NMshopService.java
+C:\git\shopImportGenerator\src\main\java\mnsk\services\parser\BFTParser.java
+C:\git\shopImportGenerator\src\main\java\mnsk\beans\export\ImportNode.java
+C:\git\shopImportGenerator\src\main\java\mnsk\ImportFileGenerator.java

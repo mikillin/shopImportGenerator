@@ -1,4 +1,4 @@
-package mnsk.beans;
+package mnsk.beans.export;
 
 import mnsk.App;
 

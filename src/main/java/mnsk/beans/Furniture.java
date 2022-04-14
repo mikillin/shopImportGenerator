@@ -1,4 +1,4 @@
-package mnsk;
+package mnsk.beans;
 
 //table in localDB
 public class Furniture {
@@ -25,6 +25,30 @@ public class Furniture {
     private int budget;
     private String type;
 
+    //additional
+    private String link;
+
+
+    public Furniture(String link) {
+        this.link = link;
+    }
+
+    public Furniture(String name, int cost, String link) {
+        this.name = name;
+        this.cost = cost;
+        this.link = link;
+    }
+
+    public Furniture() {
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 
     public String getSku() {
         return sku;

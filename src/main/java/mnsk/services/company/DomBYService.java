@@ -1,8 +1,9 @@
-package mnsk.services;
+package mnsk.services.company;
 
 import mnsk.App;
-import mnsk.beans.ImportNode;
-import mnsk.beans.ProductImporter;
+import mnsk.beans.export.ImportNode;
+import mnsk.beans.export.ProductImporter;
+import mnsk.services.ImporterService;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -24,7 +25,7 @@ public class DomBYService extends ImporterService {
     public static final int DATA_LINK_INDEX = 10;
     public static final int DATA_NAME_INDEX = 1;
 
-    private final static String FILE_SOURCE = "C:\\products.csv";
+    private final static String FILE_SOURCE = "C:\\work\\shop\\products.csv";
 
 
     @Override

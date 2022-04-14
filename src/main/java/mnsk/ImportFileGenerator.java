@@ -1,7 +1,8 @@
 package mnsk;
 
-import mnsk.beans.ImportNode;
-import mnsk.beans.ProductImporter;
+import mnsk.beans.Furniture;
+import mnsk.beans.export.ImportNode;
+import mnsk.beans.export.ProductImporter;
 import mnsk.services.ImporterService;
 import org.jsoup.select.Elements;
 import org.w3c.dom.*;
@@ -16,13 +17,13 @@ import java.util.Set;
 
 public class ImportFileGenerator {
 
-    public final static String SOURCE_FILE_DB = "d:/source.xml";
-    public final static String SOURCE_FILE_CSV_BFT = "d:/source.csv";
+    public final static String SOURCE_FILE_DB = "d:\\work\\shop\\source.xml";
+    public final static String SOURCE_FILE_CSV_BFT = "d:\\work\\shop\\source.csv";
     // public final static String SOURCE_FILE_CSV_WITH_SPECIALID = "d:/сodes.csv";
 //    public final static String SOURCE_FILE_DB = "C:/source.xml";
 //    public final static String SOURCE_FILE_DB = "d:/src.xml";
 
-    private final static String FILE_SOURCE = "C:\\data.csv";
+    private final static String FILE_SOURCE = "C:\\work\\shop\\data.csv";
     private final static String SEARCH_URL = "https://bft.by/catalog/?q=";
     private final static int PRODUCT_CODE_SOURCE_CSV_INDEX = 0;
     public static final String BASE_BFT_URL = "http://bft.by/";
@@ -41,7 +42,7 @@ public class ImportFileGenerator {
     public static final String BRAND_HALMAR = "Halmar";
 
 
-    //delete in xml first DB initializyytion
+    //delete in xml first DB initialization
     public static void main(String[] args) {
         generateImportFiles();
     }
