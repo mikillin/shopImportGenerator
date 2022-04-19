@@ -4,6 +4,7 @@ import mnsk.beans.export.ImportNode;
 import mnsk.beans.export.ProductImporter;
 import mnsk.services.company.BftService;
 import mnsk.services.ImporterService;
+import mnsk.services.company.CategoryProcessingService;
 import mnsk.services.company.LoadAllBftProductsService;
 import mnsk.services.company.MebelDeloService;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -30,7 +32,7 @@ public class App {
     public final static String CSV_SEPARATOR = ";";
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
-    public static int BEGIN_ARTICLE_NUMBER = 3000;
+    public static int BEGIN_ARTICLE_NUMBER = 4500;
 
     public static String url = "jdbc:mysql://localhost:3306/shop";
     public static String username = "root";
@@ -42,10 +44,13 @@ public class App {
     static String sourceFileBFTCSV = "c:\\work\\shop\\bft.csv";
     static String[] sourceFilesBFTCSV = {"c:\\work\\shop\\Signal-24.02.csv",
             "c:\\work\\shop\\Halmar-24.02.csv"};
+
+    public static String[] specialMarketingProperty = {"45", "46", "47"};
     //static String sourceFileBFTCSV = "c:/ready/testbft.csv ";
     static int skuBegin = 0;
 
     public static void main(String[] args) {
+        System.out.println("");
         allSignalHalmarItems();
         //MebelDeloService.getProductData();
         //importMainData();
@@ -116,11 +121,11 @@ public class App {
 
             //for (String fileName : sourceFilesBFTCSV) {
 
-                Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
-                scanner.nextLine(); // pass 1 top column description row
+            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
+            scanner.nextLine(); // pass 1 top column description row
 
-                ImporterService is = new LoadAllBftProductsService();
-                is.getData();
+            ImporterService is = new LoadAllBftProductsService();
+            is.getData();
 
             //}
         } catch (IOException e2xc) {

@@ -121,15 +121,17 @@ public class MebelDeloService extends ImporterService {
                     System.err.println(">>> achtung! : ");
 
 
-                //
-                if (category.toLowerCase().indexOf("кухн") != -1 || CategoryProcessingService.checkProductCategoryException(category))
-                    return;
 
                 String podcategory = "";
-                if (product.select("span.B_crumbBox .B_crumb").size() > 1)
+                if (product.select("span.B_crumbBox .B_crumb").size() > 1) {
                     podcategory = product.select("span.B_crumbBox .B_crumb").get(2).text();
-                else
+                }
+                else {
                     System.err.println(">>> achtung! : ");
+                }
+                //
+                if (CategoryProcessingService.isProductTypeVorbidden("MD", category, podcategory))
+                    return;
                 String material = "";
                 String gabarity = "";
                 String price = "";
