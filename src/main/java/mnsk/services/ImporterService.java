@@ -2,6 +2,7 @@ package mnsk.services;
 
 
 import mnsk.App;
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -132,16 +133,24 @@ public abstract class ImporterService {
 
         imageFileName = String.valueOf(App.BEGIN_ARTICLE_NUMBER) + App.SAVED_FILES_EXTENSION;
 
-        if (!link.startsWith("http"))
-            link = "http:" + link;
 
-        try {
-
-
-
-            try(InputStream in = new URL(link).openStream()){
-                Files.copy(in, Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
+        if (link.indexOf("noimage") != -1) { //local file
+            try {
+                Files.copy(new FileInputStream(link), Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        } else {
+            if (!link.startsWith("http"))
+                link = "http:" + link;
+
+
+            try {
+
+
+                try (InputStream in = new URL(link).openStream()) {
+                    Files.copy(in, Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
+                }
 
 
            /* url = new URL(link); //Формирование url-адреса файла
@@ -160,10 +169,12 @@ public abstract class ImporterService {
             fos.flush();
             fos.close();*/
 
-        } catch (IOException e) {
-            System.err.println("Link : " + link);
-            e.printStackTrace();
+            } catch (IOException e) {
+                System.err.println("Link : " + link);
+                e.printStackTrace();
+            }
         }
+
 
         return App.IMAGE_FILE_PATH + imageFileName;
     }

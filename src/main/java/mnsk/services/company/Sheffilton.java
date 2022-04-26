@@ -15,7 +15,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+
+import static mnsk.services.company.CategoryProcessingService.getSiteCategoryNames;
 //new csv file format: Артикул;Номенклатура;Розница
 //old csv file format: Номенклатура.Артикул ;Ценовая группа/ Номенклатура/ Характеристика номенклатуры;Опт с НДС;Розница;;
 //db file format: "sku";"name";"price";"price_currency";"brand";"category";"pod_category";"material";"type";"image";"status";"budget";"ustanovka";"dostavka";"gabarity";"priznak"
@@ -25,20 +30,33 @@ import java.util.*;
  * Date: 11.02.17
  * Time: 11:59
  */
-public class LoadAllBftProductsService extends ImporterService {
+public class Sheffilton extends ImporterService {
     //todo: fill the source file
-    private final static String FILE_SOURCE = "C:\\work\\shop\\Halmar-24.02.csv"; //todo: make an array
+    private final static String FILE_SOURCE = "C:\\work\\shop\\sheffilton-14.04.2022.csv"; //todo: make an array
     private final static String FILE_CURRENT_PRODUCTS_DB = "C:\\work\\shop\\db.csv"; //todo: check always
 
     //TODO: fill the files
-    public static final ArrayList<String> NEW_PRODUCTS_PRICES_FILES_LIST = new ArrayList<>(Arrays.asList("C:\\work\\shop\\SIGNAL-12.04.2022-rozn.csv", "C:\\work\\shop\\HALMAR-12.04.2022-rozn.csv"));
+    public static final ArrayList<String> NEW_PRODUCTS_PRICES_FILES_LIST =
+            new ArrayList<>(Arrays.asList(
+                    "c:\\work\\shop\\sheffilton-14.04.2022 .csv"
+                    // , "C:\\work\\shop\\SV-20.04-rozn list 2.csv"
+                    // , "C:\\work\\shop\\SV-20.04-rozn list 3.csv"
+                    // , "C:\\work\\shop\\SV-20.04-rozn list 4.csv"
+
+            ));
 
 
     //TODO: fill the files
-    public static final ArrayList<String> EXISTING_PRODUCTS_PRICES_FILES_LIST = new ArrayList<>(Arrays.asList("C:\\work\\shop\\Signal-24.02.csv", "C:\\work\\shop\\Halmar-24.02.csv"));
+    public static final ArrayList<String> EXISTING_PRODUCTS_PRICES_FILES_LIST =
+            new ArrayList<>(Arrays.asList(
+                    "c:\\work\\shop\\sheffilton-14.04.2022 .csv"
+//                    , "C:\\work\\shop\\SV-20.04-rozn list 2.csv"
+//                    , "C:\\work\\shop\\SV-20.04-rozn list 3.csv"
+//                    , "C:\\work\\shop\\SV-20.04-rozn list 4.csv"
+            ));
 
     //TODO: fill the brands
-    public static final ArrayList<String> BRANDS = new ArrayList<>(Arrays.asList("Halmar", "Signal"));
+    public static final ArrayList<String> BRANDS = new ArrayList<>(Arrays.asList("Sheffilton"));
     private final static String SEARCH_URL = "https://bft.by/catalog/?q=";
     private final static int PRODUCT_CODE_SOURCE_CSV_INDEX = 0;
     public static final String BASE_BFT_URL = "http://bft.by";
@@ -49,25 +67,32 @@ public class LoadAllBftProductsService extends ImporterService {
     public static final String SELECTOR_FOR_CLASSIFICATION = ".bx-breadcrumb-item";
     //    public static final String SELECTOR_FOR_PRODUCT_URL = "div.block-product>a";
     public static final String SELECTOR_FOR_PRODUCT_URL = "div.bxr-element-image>a";
-    public static final String BRAND_SIGNAL = "Signal";
-    public static final String BRAND_HALMAR = "Halmar";
+
+    public static final String BRAND_SV_MEBEL = "Sheffilton";
     public static final String SIZE_DELIMITER = "x";
     public static final String REDUNDANT_COST_WORDS = " руб.";
     public static final String DESCRIPTION_SELECTOR = "td.bxr-props-name";
     public static final String[] REDUNDANT_PRODUCT_CODE_WORDS = {"new", "laquered", "square", "materac", "lampka", "nowość", "szafka", "rectangular", "white, black"};
 
     ArrayList<String> specificBrandExistingProductData = new ArrayList<>();
-    ArrayList<String> specificBrandExistingProductsNewPrice = new ArrayList<>();
-    ArrayList<String> specificBrandExistingProductsTheSamePrice = new ArrayList<>();
-    ArrayList<String> specificBrandNewProducts = new ArrayList<>();
+
+    ArrayList<String> existingProductsNewPrice = new ArrayList<>();
+    ArrayList<String> existingProductsTheSamePrice = new ArrayList<>();
+    ArrayList<String> newProducts = new ArrayList<>();
     ArrayList<String> deleteProducts = new ArrayList<>();
-    static HashMap<String, String> dbDataFor4AllDefinedBrands = new HashMap<>();
+
+    static HashMap<String, String> dbDataFor4AllDefinedBrands = new HashMap<>(); //main base with old existing data
     static HashMap<String, String> oldProductsHM = new HashMap<>();
     static HashMap<String, String> newProductsHM = new HashMap<>();
 
     static String existingProductPricesFileName = "";
     static String newProductPricesFileName = "";
 
+
+    /////////// TODO:: CSV File should be without char ; - it is in the description fieild
+
+
+    ////////// TODO: CHECK THE MESSAGE ABOVE
     @Override
     public void getData() {
 
@@ -75,126 +100,97 @@ public class LoadAllBftProductsService extends ImporterService {
 
         ImporterService.initializeFilesHeaders();
 
+        //System.out.println("--" + getSiteCategoryNames("brand", "cat", "sub", "name"));
 
-        //every brand will be processed
-        for (String brand : BRANDS) {
-            for (String existingProductListFilename : EXISTING_PRODUCTS_PRICES_FILES_LIST) {
-                if (existingProductListFilename.toLowerCase().indexOf(brand.toLowerCase()) != -1) {
-                    existingProductPricesFileName = existingProductListFilename;
-                    break;
-                }
-
-            }
-            for (String newProductListFilename : NEW_PRODUCTS_PRICES_FILES_LIST) {
-                if (newProductListFilename.toLowerCase().indexOf(brand.toLowerCase()) != -1) {
-                    newProductPricesFileName = newProductListFilename;
-                    break;
-                }
-
-            }
-            //TODO: read files
+        ArrayList<String[]> newDataSplitted = new ArrayList<>();
+        for (String fileWithData : EXISTING_PRODUCTS_PRICES_FILES_LIST) {
             try {
-                specificBrandExistingProductData = getAllDataFromCSVFile(existingProductPricesFileName);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+                String resultLine = "";
+                String[] tmpLineSplitted;
+                for (String line : getAllDataFromCSVFile(fileWithData)) {
+                    tmpLineSplitted = line.split(";", -1);
+                    if (tmpLineSplitted.length != 15 && tmpLineSplitted.length != 13) { //part of product, 12 -new product partly
+                        if (!StringUtils.isEmpty(tmpLineSplitted[0]))
+                            resultLine += "#" + line;//# for making row later
+                    } else if (tmpLineSplitted.length == 13) {//  part of a new priodcut
 
-            ArrayList<String> newProductData = new ArrayList<>();
-            try {
-                newProductData = getAllDataFromCSVFile(newProductPricesFileName);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            // fill for speedy working
-            fillOldNewProductsHMs();
-            //TODO: compare old-new data
-            //format should be:
-            //HEADER
-            //lines of data
-            String[] newProductLineParsed;
-            ArrayList<String> resultProductData = new ArrayList<>();
-            for (String newProductDataLine : newProductData) {
-                newProductLineParsed = newProductDataLine.split(";", 0);
-                if (newProductLineParsed.length == 0 || newProductLineParsed[0] == null || newProductLineParsed[0].length() == 1 || "".equals(newProductLineParsed[0]) || StringUtils.isEmpty(newProductLineParsed[0])
-
-                ) continue;
-
-                //chekc all new
-                // check all old
-                // if sku new == sku old
-                // check price
-                // changed - old change price
-                // the same - nothing
-                // did't find  then it is a new item
-                String[] existingProductLineParsed;
-                boolean existingProduct = false;
-                for (String existingProductDataLine : specificBrandExistingProductData) {
-                    existingProductLineParsed = existingProductDataLine.split(";", 0);
-                    if (existingProductLineParsed.length == 0 || existingProductLineParsed[0] == null || existingProductLineParsed[0].length() == 1 || "".equals(existingProductLineParsed[0]) || StringUtils.isEmpty(existingProductLineParsed[0]))
-                        continue;
-
-                    //TODO: check place of fields. they may be different
-                    //check for the article number
-                    if (existingProductLineParsed[0].equals(newProductLineParsed[0])) {
-                        //TODO: !!!check place of fields. they may be different
-                        existingProduct = true;
-                        if (existingProductLineParsed.length < 4) {
-                            System.err.println("achtung!! parsed length < 4 :: " + existingProductDataLine);
-                            continue;
+                        if (!StringUtils.isEmpty(resultLine)) { // description has several lines
+                            newDataSplitted.add(resultLine.split(";", -1));
                         }
+                        resultLine = line;
+                    } else { // new product
 
-                        //check price
-                        if (existingProductLineParsed[3].equals(newProductLineParsed[2])) {
-                            specificBrandExistingProductsTheSamePrice.add(existingProductDataLine);
-                        } else {
-                            specificBrandExistingProductsNewPrice.add(existingProductDataLine);
-
-                        }
+                        if (tmpLineSplitted[1].length() > 1) //not empty
+                            newDataSplitted.add(tmpLineSplitted);
                     }
                 }
-                if (!existingProduct) //if not in the list of the existing products, than it should be added as new one
-                    specificBrandNewProducts.add(newProductDataLine);
-            }
 
-            String[] splittedData;
-            String[] splittedDataNew;
-            String sku = "";
-            boolean isExists;
-            String productBrand = "";
-
-
-            ArrayList<String> existingProductDataFromDB = new ArrayList<>();
-
-            try {
-                existingProductDataFromDB = getAllDataFromCSVFile(FILE_CURRENT_PRODUCTS_DB);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
-            for (String existingProductDataLine : existingProductDataFromDB) {
-
-                splittedData = existingProductDataLine.split(";", 0);
-                productBrand = String.valueOf(splittedData[4]);
-                productBrand = productBrand.substring(1, productBrand.length()); // without signs "
-                if (!productBrand.equalsIgnoreCase(brand))
-                    continue;
-                isExists = false;
-                for (String newProductDataLine : newProductData) {
-                    splittedDataNew = newProductDataLine.split(";", 0);
-                    sku = String.valueOf(splittedDataNew[0]);
-                    sku = sku.substring(1, sku.length()); // without signs "
-                    if (String.valueOf(splittedData[0]).equals(sku)) {
-                        isExists = true;
-                    }
-                }
-                if (!isExists) {
-                    deleteProducts.add(existingProductDataLine);
-                }
-
             }
         }
 
-        fillData(specificBrandExistingProductsTheSamePrice, specificBrandExistingProductsNewPrice, specificBrandNewProducts, deleteProducts);
+        String dataFromDB = "";
+        String[] dataFromDBSplitted = null;
+        for (String[] data : newDataSplitted) {
+            //todo: change as the name on the site is another as in the pricelist it is too long
+            if (data.length < 4 || data[3] == null || StringUtils.isEmpty(data[3]))
+                continue;
+            dataFromDB = dbDataFor4AllDefinedBrands.get(String.valueOf(data[3]));
+            if (dataFromDB == null) { // name of the product was in the DB
+                //this means that the price will be new
+                //TODO: make a method to add data as new
+                //check from DB wil be with quotes " - and then check without  them
+                newProducts.add(String.join(";",
+                        new String[]{
+                                data[1].replaceAll("\"", "").replaceAll(";", ","),
+                                data[3].replaceAll("\"", "").replaceAll(";", ","),
+                                data[13].replaceAll("\"", "").replaceAll(";", ",")}));
+                // todo:
+                //  PRODUCT_CODE_SOURCE_CSV_INDEX= 0,
+                //  name,
+                //  cost
+
+            } else {
+                // old product
+                dataFromDBSplitted = dataFromDB.split(";");
+                if ((String.valueOf(data[2]) + "0000").equals(String.valueOf(dataFromDBSplitted[2]).replaceAll("\"", ""))) {
+                    //the same price
+
+                    existingProductsTheSamePrice.add(dataFromDB);
+                } else {
+                    // another price
+                    dataFromDBSplitted[2] = data[13] + "0000";
+                    String.join(";", dataFromDBSplitted);
+                    existingProductsNewPrice.add(dataFromDB);
+                }
+            }
+        }
+
+        String[] valueParsed = null;
+        String[] valueCheckedParsed = null;
+
+        for (String value : dbDataFor4AllDefinedBrands.values()) {
+            valueParsed = value.split(";");
+
+            for (String item : existingProductsTheSamePrice) {
+                valueCheckedParsed = item.split(";");
+                if (valueParsed[0].equals(valueCheckedParsed[0])) { //sku was already processed
+                    continue;
+                }
+            }
+            for (String item : existingProductsNewPrice) {
+                valueCheckedParsed = item.split(";");
+                if (valueParsed[0].equals(valueCheckedParsed[0])) { //sku was already processed
+                    continue;
+                }
+            }
+
+            deleteProducts.add(value);
+        }
+
+
+        fillData(existingProductsNewPrice, newProducts, deleteProducts);
 
 
         ImporterService.saveTOFile(ImporterService.sbExportOne, App.FILE_EXPORT_FIRST);
@@ -205,50 +201,29 @@ public class LoadAllBftProductsService extends ImporterService {
     }
 
 
-    private static void fillData(ArrayList<String> existingProductsTheSamePrice, ArrayList<String> existingProductsNewPrice, ArrayList<String> newProducts, ArrayList<String> deleteProducts) {
-        ArrayList<String> csvData = new ArrayList<>();
+    private static void fillData
+            (ArrayList<String> existingProductsNewPrice, ArrayList<String> newProducts, ArrayList<String> deleteProducts) {
+        ArrayList<String> csvData;
         ImportNode in = new ImportNode();
         String[] splittedData;
-        String[] infoSplitted;
 
-        String code = "";
-        String dataX = "";
-        String[] splittedProductInfo;
-        //fill changed price
-        String infoFromDB = "";
+        //fill 1 file: only new price
         for (String item : existingProductsNewPrice) {
-            splittedData = item.split(";", 0);
-            //todo: check
-            infoFromDB = dbDataFor4AllDefinedBrands.get(splittedData[1]);
-            if (infoFromDB == null) { //it is not in the old DB
-                System.err.println("no key in dbDataFor4Brands:" + splittedData[1]);
-                //it is new though products Артикул;Номенклатура*new*;Розница
-                if (!newProducts.contains(newProductsHM.get(splittedData[0])))
-                    newProducts.add(newProductsHM.get(splittedData[0]));
-                continue;
-            }
-            infoFromDB = infoFromDB.replaceAll("\"", "");
-            infoSplitted = infoFromDB.split(";", 0);
-            in.setSku(infoSplitted[0]);
-            in.setImage(infoSplitted[9]);
-            in.setPRICE_CURRENCY(infoSplitted[3]);
+            splittedData = item.split(";", -1);
 
-            code = splittedData[0];
-            dataX = newProductsHM.get(oldProductsHM.get(infoSplitted[1]));
-            splittedProductInfo = dataX.split(";");
+            in.setSku(splittedData[0]);
+            in.setImage(splittedData[9]);
+            in.setPRICE_CURRENCY(splittedData[3]);
 
-            in.setName(splittedProductInfo[1]); //change name from the new price list
-            in.setPrice(splittedProductInfo[2].replaceAll(" ", "") + "0000");    //changed cost
+            in.setName(splittedData[1]); //change name from the new price list
+            in.setPrice(splittedData[2]);    //changed cost
             ImporterService.sbExportOne.append(in.toString());
 
-            //todo:maybe need to add info also in the second file
         }
 
 
         String[] lineToHideSplitted;
         for (String lineToHide : deleteProducts) {
-
-            //lineToHide.replaceAll(";1;", ";0;");
             lineToHideSplitted = lineToHide.split(";", 0);
 
             ProductImporter pi = new ProductImporter();
@@ -275,12 +250,6 @@ public class LoadAllBftProductsService extends ImporterService {
 
         ArrayList<Furniture> furnitureItems = new ArrayList<>();
 
-        //todo: delete
-//        furnitureItems.add(
-//                new Furniture("Name", 4,"https://bft.by/catalog/mebel_1/kresla_ud/kompyuternye_kresla/kreslo_kompyuternoe_halmar_gonzo_2_belyy/"
-//                ));
-
-
         String productName = "";
         String cathegoryMainFromVendorSite = "";
         String subCathegoryFromVendorSite = "";
@@ -289,18 +258,14 @@ public class LoadAllBftProductsService extends ImporterService {
         Elements description;
         String material = "";
         String size = "";
-        String categoryName = "";
-        String subCategoryName = "";
-        boolean isCheckSubCategoryNameFlag = false;
-        for (String data : csvData) {
-            //todo: delete
-//            if (data != null)
-//                break;
 
+        for (String data : csvData) {
             splittedData = data.split(";", 0);
 
+            if (splittedData == null || splittedData.length < 1 || StringUtils.isEmpty(splittedData[0])) // head of product types for Sokol pnly
+                continue;
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -321,10 +286,10 @@ public class LoadAllBftProductsService extends ImporterService {
             for (Element subURL : elements) {
                 try {
                     //todo: implement
-                    //if (!CategoryProcessingService.checkProductCategoryException(splittedData[1])) //check for the exception in categories, whcih shouldn't be added
+                    //if (!CategoryProcessingService.isProductTypeVorbidden("SV-Мебель", splittedData[1])) //check for the exception in categories, whcih shouldn't be added
                     furnitureItems.add(new Furniture(splittedData[1], Integer.parseInt(splittedData[2].replaceAll(" ", "")), getBFTProductURL(subURL.attr("href"))));
                 } catch (Exception exc) {
-                    System.err.println(">>> productCode: " + productCode);
+                    System.err.println(">>> productCode: " + productCode + ", exc : " + exc);
                 }
             }
         }
@@ -334,21 +299,32 @@ public class LoadAllBftProductsService extends ImporterService {
             ProductImporter pi = new ProductImporter();
             size = "";
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             Document product = ImporterService.getHTMLDocument(furnitureItem.getLink());
 
-            if(product == null)
-            {
+            if (product == null) {
                 System.err.println(">> error: " + furnitureItem.getLink());
                 continue;
             }
-            imageURL = getBFTProductURL(product.select(SELECTOR_FOR_PRODUCT_IMAGE).attr("href"));
+            Elements imageElements = product.select(SELECTOR_FOR_PRODUCT_IMAGE);
+            String imageCorrectURL = "";
+
+            if (imageElements.size() == 0 || imageElements.get(0).attr("href").equals("")) {
+                System.err.println("No Image furnitureItem.getLink(): " + furnitureItem.getLink());
+                imageCorrectURL = "C:\\git\\shopImportGenerator\\view\\noimage.jpg";
+            } else {
+                imageCorrectURL = imageElements.get(0).attr("href");
+
+            }
+            imageURL = getBFTProductURL(imageCorrectURL);
             subCathegoryFromVendorSite = product.select(SELECTOR_FOR_CLASSIFICATION).last().text();
             cathegoryMainFromVendorSite = product.select(SELECTOR_FOR_CLASSIFICATION).last().previousElementSibling().text();
 
+//            if (!CategoryProcessingService.isProductTypeVorbidden("SV-Мебель", cathegoryMainFromVendorSite, subCathegoryFromVendorSite)) //check for the exception in categories, whcih shouldn't be added
+//                System.out.println("");
             String imageName = ImporterService.saveImageOnDisk(imageURL);
 
 
@@ -392,17 +368,17 @@ public class LoadAllBftProductsService extends ImporterService {
             if (n == 1)
                 priznak = "45"; // lower price
             pi.setPriznak(priznak);
-            pi.setBrand(furnitureItem.getName().toUpperCase().contains(BRAND_SIGNAL.toUpperCase()) ? BRAND_SIGNAL : (furnitureItem.getName().toUpperCase().contains(BRAND_HALMAR.toUpperCase()) ? BRAND_HALMAR : "BFT"));
+            pi.setBrand(BRAND_SV_MEBEL);
 
-            CategoryProcessingService.InnerClass siteCategoryInfo = CategoryProcessingService.getSiteCategoryNames(pi.getBrand(), cathegoryMainFromVendorSite, subCathegoryFromVendorSite, in.getName());
+            CategoryProcessingService.InnerClass siteCategoryInfo = getSiteCategoryNames(pi.getBrand(), cathegoryMainFromVendorSite, subCathegoryFromVendorSite, in.getName());
 
             // todo: return classification
 
-            //            pi.setCategory(siteCategoryInfo.categoryName);
-            //            pi.setPod_category(siteCategoryInfo.subcategoryName);
-            pi.setCategory(cathegoryMainFromVendorSite);
-            pi.setPod_category(subCathegoryFromVendorSite);
-            pi.setStatus(CategoryProcessingService.isProductTypeVorbidden(pi.getBrand(), cathegoryMainFromVendorSite, subCathegoryFromVendorSite) ? "0" : "1");
+            pi.setCategory(siteCategoryInfo.categoryName);
+            pi.setPod_category(siteCategoryInfo.subcategoryName);
+//            pi.setCategory(cathegoryMainFromVendorSite);
+//            pi.setPod_category(subCathegoryFromVendorSite);
+            pi.setStatus(CategoryProcessingService.isProductTypeVorbidden(pi.getBrand(), siteCategoryInfo.categoryName, siteCategoryInfo.subcategoryName, in.getName()) ? "0" : "1");
             ImporterService.sbExportOne.append(in.toString());
             ImporterService.sbExportTwo.append(pi.toString());
 
@@ -428,7 +404,10 @@ public class LoadAllBftProductsService extends ImporterService {
 
 
     private static String getBFTProductURL(String subURL) {
-        return BASE_BFT_URL + subURL;
+        if (subURL.indexOf("noimage") == -1)
+            return BASE_BFT_URL + subURL;
+        else
+            return subURL;
     }
 
     private static String getProductCodeWithoutRedundantWords(String sourceProduceCode) {
@@ -489,7 +468,7 @@ public class LoadAllBftProductsService extends ImporterService {
             brand = String.valueOf(splittedData[4]);
             brand = brand.substring(1, brand.length() - 1); // without signs "
             if (BRANDS.contains(brand)) {
-                dbDataFor4AllDefinedBrands.put(splittedData[1].replaceAll("\"", "").trim(), item); // HashMap <name: all info>
+                dbDataFor4AllDefinedBrands.put(splittedData[1].replaceAll("\"", "").trim(), item.replaceAll("\"", "")); // HashMap <name: all info>
             }
         }
 

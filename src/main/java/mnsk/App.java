@@ -2,11 +2,8 @@ package mnsk;
 
 import mnsk.beans.export.ImportNode;
 import mnsk.beans.export.ProductImporter;
-import mnsk.services.company.BftService;
+import mnsk.services.company.*;
 import mnsk.services.ImporterService;
-import mnsk.services.company.CategoryProcessingService;
-import mnsk.services.company.LoadAllBftProductsService;
-import mnsk.services.company.MebelDeloService;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +29,10 @@ public class App {
     public final static String CSV_SEPARATOR = ";";
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
-    public static int BEGIN_ARTICLE_NUMBER = 4500;
+    public static int BEGIN_ARTICLE_NUMBER = 6700;
+    //sv-мебель 5300-6300,
+    //sokol 6300 - 6700,
+    // sheffileton 6700 - 9200
 
     public static String url = "jdbc:mysql://localhost:3306/shop";
     public static String username = "root";
@@ -50,8 +50,13 @@ public class App {
     static int skuBegin = 0;
 
     public static void main(String[] args) {
-        System.out.println("");
-        allSignalHalmarItems();
+//        System.out.println("");
+
+//        System.out.printf("-->"  + CategoryProcessingService.CLASSIFICATION_RULES.get("Signal"));
+        //SokolMEBELItems();
+        SheffiltonItems();
+//        svMEBELItems();
+        //allSignalHalmarItems();
         //MebelDeloService.getProductData();
         //importMainData();
         //updateLastSKU(); //obligatory
@@ -115,6 +120,56 @@ public class App {
 
 
     }
+
+
+    static void SokolMEBELItems() {
+        try {
+
+            //for (String fileName : sourceFilesBFTCSV) {
+
+            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
+            scanner.nextLine(); // pass 1 top column description row
+
+            ImporterService is = new Sokol();
+            is.getData();
+
+            //}
+        } catch (IOException e2xc) {
+            System.out.println(e2xc);
+        }
+    }static void SheffiltonItems() {
+        try {
+
+            //for (String fileName : sourceFilesBFTCSV) {
+
+            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
+            scanner.nextLine(); // pass 1 top column description row
+
+            ImporterService is = new Sheffilton();
+            is.getData();
+
+            //}
+        } catch (IOException e2xc) {
+            System.out.println(e2xc);
+        }
+    }
+    static void svMEBELItems() {
+        try {
+
+            //for (String fileName : sourceFilesBFTCSV) {
+
+            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
+            scanner.nextLine(); // pass 1 top column description row
+
+            ImporterService is = new SVMebel();
+            is.getData();
+
+            //}
+        } catch (IOException e2xc) {
+            System.out.println(e2xc);
+        }
+    }
+
 
     static void allSignalHalmarItems() {
         try {
