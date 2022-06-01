@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 05.12.16
  * Time: 20:36
  */
-public class HalmarService extends ImporterService {
+public class HalmarPLService extends ImporterService {
 
     public static final String TAG_ATTRIBUTE_WITH_PATH = "href";
     private static final String BASE_URL = "http://www.halmar.pl";

@@ -5,35 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3c8e9795-a167-4dc2-83dd-59e3ff029ab9" name="Changes" comment="Still work on the classification rules">
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/avatar.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/script.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/9700.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/9701.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/9702.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/9703.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/9704.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/9705.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/SendEmail.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/DomParser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BFTCommon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftDBService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelMinskMontanjaService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelMinskSoldatovService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/ReconfigureDBService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/view/index2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/view/index3.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/ImporterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/ImporterService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/CategoryProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/CategoryProcessingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/LoadAllBftProductsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/LoadAllBftProductsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/CategoryProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/CategoryProcessingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/HalmarService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/HalmarPLService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/LoadAllBftProductsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelDeloService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelDeloService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sokol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sokol.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/App$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/App$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/App$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/App$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/ImportFileGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/ImportFileGenerator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/beans/Furniture.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/beans/Furniture.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/beans/export/ImportNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/beans/export/ImportNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/beans/export/ProductImporter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/beans/export/ProductImporter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/DBImportService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/DBImportService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/ImporterService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/ImporterService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/BftService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/BftService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/DomBYService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/DomBYService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/HalmarService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/HalmarService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/LoadAllBftProductsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/LoadAllBftProductsService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/HalmarService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/LoadAllBftProductsService.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/MebelDeloService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/MebelDeloService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/MekoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/MekoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/NMshopService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/NMshopService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/parser/BFTParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/parser/BFTParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/mnsk/AppTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/mnsk/AppTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +49,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="Class" />
       </list>
     </option>
@@ -79,24 +86,42 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/view" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\git\shopImportGenerator\view" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="mnsk.services.company" />
       <recent name="mnsk.services" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="mnsk.App" />
+      <module name="shop" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="mnsk.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SendEmail" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="mnsk.SendEmail" />
       <module name="shop" />
       <extension name="coverage">
         <pattern>
@@ -111,6 +136,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.App" />
+        <item itemvalue="Application.SendEmail" />
       </list>
     </recent_temporary>
   </component>
@@ -139,6 +165,16 @@
       <workItem from="1650801127806" duration="15227000" />
       <workItem from="1650820457885" duration="28444000" />
       <workItem from="1650898903439" duration="28201000" />
+      <workItem from="1650985398044" duration="14000" />
+      <workItem from="1651152033259" duration="50000" />
+      <workItem from="1651236018943" duration="21605000" />
+      <workItem from="1651402787601" duration="1599000" />
+      <workItem from="1651437477642" duration="134000" />
+      <workItem from="1652338374420" duration="8289000" />
+      <workItem from="1652386975127" duration="235000" />
+      <workItem from="1652942198126" duration="10725000" />
+      <workItem from="1653588260021" duration="89879000" />
+      <workItem from="1654019101767" duration="32452000" />
     </task>
     <task id="LOCAL-00001" summary="Still work on the classification rules">
       <created>1650395764242</created>
@@ -172,48 +208,17 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
-          <line>136</line>
-          <option name="timeStamp" value="30" />
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java</url>
+          <line>233</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
-          <line>173</line>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
-          <line>210</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
-          <line>226</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
-          <line>262</line>
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
-          <line>289</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
-          <line>298</line>
-          <option name="timeStamp" value="36" />
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java</url>
+          <line>182</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="tmp" />
-        <watch expression="furnitureItems" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

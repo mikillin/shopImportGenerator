@@ -4,6 +4,7 @@ package mnsk.services.company;
 import mnsk.App;
 import mnsk.beans.export.ImportNode;
 import mnsk.beans.export.ProductImporter;
+import mnsk.services.CategoryProcessingService;
 import mnsk.services.ImporterService;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -121,12 +122,10 @@ public class MebelDeloService extends ImporterService {
                     System.err.println(">>> achtung! : ");
 
 
-
                 String podcategory = "";
                 if (product.select("span.B_crumbBox .B_crumb").size() > 1) {
                     podcategory = product.select("span.B_crumbBox .B_crumb").get(2).text();
-                }
-                else {
+                } else {
                     System.err.println(">>> achtung! : ");
                 }
                 //
@@ -157,7 +156,7 @@ public class MebelDeloService extends ImporterService {
                 pi.setSKU(in.getSku());
                 pi.setName(in.getName());
                 pi.setBrand(BRAND);
-
+                pi.setStatus("1");
                 pi.setMaterial(material);
                 pi.setGabarity(gabarity);
                 pi.setOpisanie(description);

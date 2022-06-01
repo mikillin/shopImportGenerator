@@ -2,6 +2,7 @@ package mnsk;
 
 import mnsk.beans.export.ImportNode;
 import mnsk.beans.export.ProductImporter;
+import mnsk.services.CategoryProcessingService;
 import mnsk.services.company.*;
 import mnsk.services.ImporterService;
 
@@ -10,7 +11,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -29,10 +29,14 @@ public class App {
     public final static String CSV_SEPARATOR = ";";
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
-    public static int BEGIN_ARTICLE_NUMBER = 6700;
-    //sv-мебель 5300-6300,
-    //sokol 6300 - 6700,
+    public static int BEGIN_ARTICLE_NUMBER = 9700;
+    // Signal 9600 - 9700
+    // Монтанья 9500 - 9600
+    // soldatov 9300 - 9500
     // sheffileton 6700 - 9200
+    // sokol 6300 - 6700,
+    // sv-мебель 5300-6300,
+
 
     public static String url = "jdbc:mysql://localhost:3306/shop";
     public static String username = "root";
@@ -42,21 +46,29 @@ public class App {
     static String sourceFileCodes = "c:\\work\\shop\\ready\\codes.csv";
     static String sourceDataFromDB = "c:\\work\\shop\\furniture.csv";
     static String sourceFileBFTCSV = "c:\\work\\shop\\bft.csv";
-    static String[] sourceFilesBFTCSV = {"c:\\work\\shop\\Signal-24.02.csv",
-            "c:\\work\\shop\\Halmar-24.02.csv"};
+    static String[] sourceFilesBFTCSV = {"c:\\work\\shop\\Signal-26.05-rozn.csv"
+            // , "c:\\work\\shop\\Halmar-24.02.csv"
+    };
 
     public static String[] specialMarketingProperty = {"45", "46", "47"};
     //static String sourceFileBFTCSV = "c:/ready/testbft.csv ";
     static int skuBegin = 0;
 
     public static void main(String[] args) {
+
+        ///// TODO: CHECK THE STRUCTURE OF THE DB FILE- IT IS NEW- OPISANIE IS ADDED
+        //  System.out.print(CategoryProcessingService.isProductWithNameVorbidden("Основание для стола"));
 //        System.out.println("");
 
 //        System.out.printf("-->"  + CategoryProcessingService.CLASSIFICATION_RULES.get("Signal"));
-        //SokolMEBELItems();
-        SheffiltonItems();
-//        svMEBELItems();
-        //allSignalHalmarItems();
+        //     SokolMEBELItems();
+//        SheffiltonItems();
+//        SoldatovItems();
+//        MontanjaItems();
+        //  ReconfigureItems();
+        svMEBELItems();
+//        allSignalHalmarItems();
+//        BFT2FilesItems();
         //MebelDeloService.getProductData();
         //importMainData();
         //updateLastSKU(); //obligatory
@@ -90,7 +102,7 @@ public class App {
 
     static void createNewListOFProductsBFT() {
         try {
-            List<String> codes = BftService.getSpecialIDFromBFTCSVPriceFile(sourceFileBFTCSV);
+            List<String> codes = BftDBService.getSpecialIDFromBFTCSVPriceFile(sourceFileBFTCSV);
             ArrayList<String> newCodes = new ArrayList<String>();
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement stmt = connection.createStatement();
@@ -106,7 +118,7 @@ public class App {
                     System.out.println("Err: turned off not added !!! " + code);
             }
 
-            BftService.getDataForSpecialID(newCodes);
+            BftDBService.getDataForSpecialID(newCodes);
             connection.close();
 
         } catch (IOException exc) {
@@ -122,71 +134,44 @@ public class App {
     }
 
 
-    static void SokolMEBELItems() {
-        try {
-
-            //for (String fileName : sourceFilesBFTCSV) {
-
-            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
-            scanner.nextLine(); // pass 1 top column description row
-
-            ImporterService is = new Sokol();
-            is.getData();
-
-            //}
-        } catch (IOException e2xc) {
-            System.out.println(e2xc);
-        }
-    }static void SheffiltonItems() {
-        try {
-
-            //for (String fileName : sourceFilesBFTCSV) {
-
-            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
-            scanner.nextLine(); // pass 1 top column description row
-
-            ImporterService is = new Sheffilton();
-            is.getData();
-
-            //}
-        } catch (IOException e2xc) {
-            System.out.println(e2xc);
-        }
+    static void MontanjaItems() {
+        ImporterService is = new MebelMinskMontanjaService();
+        is.getData();
     }
+
+    static void ReconfigureItems() {
+        ImporterService is = new ReconfigureDBService();
+        is.getData();
+    }
+
+    static void SoldatovItems() {
+        ImporterService is = new MebelMinskSoldatovService();
+        is.getData();
+    }
+
+    static void SokolMEBELItems() {
+
+        ImporterService is = new Sokol();
+        is.getData();
+    }
+
+    static void SheffiltonItems() {
+        ImporterService is = new Sheffilton();
+        is.getData();
+    }
+
     static void svMEBELItems() {
-        try {
-
-            //for (String fileName : sourceFilesBFTCSV) {
-
-            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
-            scanner.nextLine(); // pass 1 top column description row
-
-            ImporterService is = new SVMebel();
-            is.getData();
-
-            //}
-        } catch (IOException e2xc) {
-            System.out.println(e2xc);
-        }
+        ImporterService is = new SVMebel();
+        is.getData();
     }
 
 
     static void allSignalHalmarItems() {
-        try {
 
-            //for (String fileName : sourceFilesBFTCSV) {
-
-            Scanner scanner = new Scanner(new File(sourceFilesBFTCSV[0]));
-            scanner.nextLine(); // pass 1 top column description row
-
-            ImporterService is = new LoadAllBftProductsService();
-            is.getData();
-
-            //}
-        } catch (IOException e2xc) {
-            System.out.println(e2xc);
-        }
+        ImporterService is = new BftService();
+        is.getData();
     }
+
 
     static void newSignalHalmarItems() {
         String test = "", query = "";

@@ -5,6 +5,8 @@ import mnsk.App;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.net.URL;
@@ -73,7 +75,7 @@ public abstract class ImporterService {
     public static Document getHTMLDocument(String htmlLink) {
         Document doc = null;
         try {
-            doc = Jsoup.connect(htmlLink).get();
+            doc = Jsoup.connect(htmlLink).timeout(0).get();
         } catch (java.lang.NullPointerException npe) {
             System.err.println(">>>>" + htmlLink);
             npe.printStackTrace();
@@ -123,14 +125,25 @@ public abstract class ImporterService {
         return App.IMAGE_FILE_PATH + imageFileName;
     }
 
+    public static String saveImageOnDisk(Elements elements, String imgTag) {
+        String names = "";
+        int count = 0;
+        for (Element element : elements) {
+            if (names.length() > 0)
+                names += ",";
+            names += saveImageOnDisk(element.baseUri() + element.attr(imgTag), count, true);
+            count++;
+        }
+        return names;
+
+    }
+
     public static String saveImageOnDisk(String link) {
 
 
         String imageFileName;
         URL url;
         URLConnection conn;
-
-
         imageFileName = String.valueOf(App.BEGIN_ARTICLE_NUMBER) + App.SAVED_FILES_EXTENSION;
 
 
@@ -143,38 +156,15 @@ public abstract class ImporterService {
         } else {
             if (!link.startsWith("http"))
                 link = "http:" + link;
-
-
             try {
-
-
                 try (InputStream in = new URL(link).openStream()) {
                     Files.copy(in, Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
                 }
-
-
-           /* url = new URL(link); //Формирование url-адреса файла
-            conn = url.openConnection();
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-
-            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-            FileOutputStream fos = new FileOutputStream(new File(imageFileName));
-
-            int ch;
-            while ((ch = bis.read()) != -1) {
-                fos.write(ch);
-            }
-            bis.close();
-            fos.flush();
-            fos.close();*/
-
             } catch (IOException e) {
                 System.err.println("Link : " + link);
                 e.printStackTrace();
             }
         }
-
 
         return App.IMAGE_FILE_PATH + imageFileName;
     }

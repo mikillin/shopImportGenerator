@@ -5,6 +5,7 @@ import mnsk.App;
 import mnsk.beans.Furniture;
 import mnsk.beans.export.ImportNode;
 import mnsk.beans.export.ProductImporter;
+import mnsk.services.CategoryProcessingService;
 import mnsk.services.ImporterService;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-import static mnsk.services.company.CategoryProcessingService.getSiteCategoryNames;
+import static mnsk.services.CategoryProcessingService.getSiteCategoryNames;
 //new csv file format: Артикул;Номенклатура;Розница
 //old csv file format: Номенклатура.Артикул ;Ценовая группа/ Номенклатура/ Характеристика номенклатуры;Опт с НДС;Розница;;
 //db file format: "sku";"name";"price";"price_currency";"brand";"category";"pod_category";"material";"type";"image";"status";"budget";"ustanovka";"dostavka";"gabarity";"priznak"
