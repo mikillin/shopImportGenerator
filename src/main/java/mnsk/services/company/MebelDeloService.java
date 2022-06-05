@@ -141,6 +141,9 @@ public class MebelDeloService extends ImporterService {
             }
 
         }
+
+        //todo: is it the same ??
+        // deleteProducts = deleteFromDBNotExisting (allProductNames)
         setAsDeletedObsoleteProducts(deleteProducts);
 
     }

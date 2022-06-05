@@ -70,7 +70,7 @@ public class ReconfigureDBService extends ImporterService {
                 ImporterService.sbExportTwo.append(pi);
 
             } catch (Exception exc) {
-                System.err.println("fill -- sku: " + items[0]);
+                System.err.println("For this product line sku was not defined: " + items[0]);
             }
         }
 

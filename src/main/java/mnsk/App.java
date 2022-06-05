@@ -32,6 +32,9 @@ public class App {
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
     public static int BEGIN_ARTICLE_NUMBER = 11306;
+
+    //todo: сделать удаление если нет в базе: проход по базе если нет в новом прайсе - удалить.
+
     // 11200 -11305 SV-Мебель
     // 10650 -11195  MD
     //10564 - 10612 Собственное производство
@@ -71,7 +74,7 @@ public class App {
 //        SheffiltonItems();
 //        SoldatovItems();
 //        MontanjaItems();
-          ReconfigureItems();
+                            ReconfigureItems();
         //   svMEBELItems();
 //        allSignalHalmarItems();
 //        BFT2FilesItems();
@@ -92,12 +95,13 @@ public class App {
 //        System.out.print(">>" + CategoryProcessingService.getSiteCategoryNames("Мебель для гостиной / Набор мебели для гостиной Гостиная К №7 (Зеркало)"));
 
 
-        CategoryProcessingService.InnerClass siteCategoryInfo =
-        CategoryProcessingService.getSiteCategoryNames("Каркас стула Sheffilton");
-        System.out.println("category: " + siteCategoryInfo.categoryName);
-        System.out.println("subcategory: " + siteCategoryInfo.subcategoryName);
+//        String name = "Каркас стула Sheffilton SHT-S93";
+//        CategoryProcessingService.InnerClass siteCategoryInfo =
+//        CategoryProcessingService.getSiteCategoryNames(name);
+//        System.out.println("category: " + siteCategoryInfo.categoryName);
+//        System.out.println("subcategory: " + siteCategoryInfo.subcategoryName);
 //        if (CategoryProcessingService.isProductTypeVorbidden("MD", siteCategoryInfo.categoryName, siteCategoryInfo.subcategoryName, "Кухня КГ-1 1.8 м (белый/бетон)"))
-        System.out.println(CategoryProcessingService.isProductTypeVorbidden("Каркас стула Sheffilton"));
+//        System.out.println("Запрещен: " + CategoryProcessingService.isProductTypeVorbidden(name));
 
 
         //System.out.print(">>" + CategoryProcessingService.isProductTypeVorbidden("Кухня КГ-1 1.8 м (белый/бетон)"));

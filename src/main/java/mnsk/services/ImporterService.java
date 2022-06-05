@@ -47,7 +47,6 @@ public abstract class ImporterService {
     public static final String PRODUCT_TO_HIDE_STATUS = "0";
 
 
-
     public final static String FILE_CURRENT_PRODUCTS_DB = "C:\\work\\shop\\db.csv";
     public static final String FILE_NO_IMAGE_PATH = "C:\\work\\shop\\noimage.jpg";
 
@@ -61,6 +60,7 @@ public abstract class ImporterService {
 
     /**
      * input - csv line from db sql
+     *
      * @param deleteProducts
      */
     public static void setAsDeletedObsoleteProducts(ArrayList<String> deleteProducts) {
@@ -74,6 +74,40 @@ public abstract class ImporterService {
 
             ImporterService.sbExportTwo.append(pi);
         }
+    }
+
+
+    /**
+     * checks what from DB to delete. which names are not in the list of new products
+     * @param newProductNames
+     * @return
+     */
+    public static ArrayList<String> deleteFromDBNotExisting(ArrayList<String> newProductNames) {
+        ArrayList<String> dataFromDB = new ArrayList<>();
+        ArrayList<String> toDelete = new ArrayList<>();
+        String[] splittedDBData;
+        boolean isExists;
+        try {
+            dataFromDB = getAllDataFromCSVFile(FILE_CURRENT_PRODUCTS_DB);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        for (String dataFromDBLine : dataFromDB) {
+
+            splittedDBData = dataFromDBLine.split(";", 0);
+
+            isExists = false;
+            for (String newProductName : newProductNames) {
+
+                if (String.valueOf(splittedDBData[DB_FILE_LINE_INDEX_FIELD_NAME]).equals(newProductName)) {
+                    isExists = true;
+                }
+            }
+            if (!isExists) {
+                toDelete.add(dataFromDBLine);
+            }
+        }
+        return toDelete;
     }
 
     public static void saveTOFile(StringBuffer sb, String fileName) {
@@ -237,7 +271,7 @@ public abstract class ImporterService {
                 fieldBrand = fieldBrand.substring(1, fieldBrand.length() - 1); // without signs "
             if (brand.equals(fieldBrand)) {
                 dbData.put(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME]
-                         .replaceAll(",", ".") //todo: check
+                        .replaceAll(",", ".") //todo: check
                         .replaceAll("\"", "")
                         .trim(), item); // HashMap <name: all info>
             }
