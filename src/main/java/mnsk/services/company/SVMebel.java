@@ -11,14 +11,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 import static mnsk.services.CategoryProcessingService.getSiteCategoryNames;
 //new csv file format: Артикул;Номенклатура;Розница
@@ -32,6 +27,9 @@ import static mnsk.services.CategoryProcessingService.getSiteCategoryNames;
  */
 public class SVMebel extends BFTCommon {
     //TODO: fill the files
+
+    //TODO::: CHECK dot, komma, ; as separate sign in all files
+
     public static final String BRAND = "SV-Мебель";
     public static final int EXISTING_PRODUCT_FILE_INDEX_FIELD_SKU = 1; //todo:check please
     public static final int EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME = 2; //todo:check please
@@ -44,10 +42,11 @@ public class SVMebel extends BFTCommon {
     public static final int DB_FILE_LINE_INDEX_FIELD_SKU = 0;
     public static final int DB_FILE_LINE_INDEX_FIELD_NAME = 1;
     public static final int DB_FILE_LINE_INDEX_FIELD_CURRENCY = 3;
-    public static final int DB_LINE_INDEX_FIELD_BRAND = 4;
+    public static final int DB_FILE_LINE_INDEX_FIELD_BRAND = 4;
     public static final int DB_FILE_LINE_INDEX_FIELD_IMAGE = 10;
-    public static String NEW_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\SV-МЕБЕЛЬ с 24.05.2022 - Корпус К list1 .csv";
+
     public static String EXISTING_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\SV-20.04-rozn list 1.csv";
+    public static String NEW_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\SV-МЕБЕЛЬ с 24.05.2022 - Корпус К list1 .csv";
 
 
     public static final String SELECTOR_FOR_PRODUCT_IMAGE = "div .bxr-element-image a";
@@ -64,10 +63,11 @@ public class SVMebel extends BFTCommon {
 
     static HashMap<String, String> dbData = new HashMap<>(); //main base with old existing data
     static HashMap<String, String> oldRelationNameSKUHM = new HashMap<>();
+    static HashMap<String, String> oldRelationSKUAllInfoHM = new HashMap<>();
     static HashMap<String, String> newRelationSKUAllInfoHM = new HashMap<>();
 
 
-    ArrayList<String> productsWithNewPrice = new ArrayList<>();
+    ArrayList<String> existingProductsWithNewPrice = new ArrayList<>();
 
     @Override
     public void getData() {
@@ -106,6 +106,15 @@ public class SVMebel extends BFTCommon {
 
         String[] newProductLineParsed;
         boolean existingProduct;
+
+
+//        error
+//        newProductData.clear();
+//        newProductData.add("Шкафы-купе;Шкаф-купе К №24 (2.0 м) (Фасад Тип 1) (ЛЕВАЯ) Дуб Сильвер;00-00101345;25.04;1;0.089;484");
+//        existingProductData.clear();
+//        existingProductData.add("Шкафы-купе;00-00101345;Шкаф-купе К №24 (2.0 м) (Фасад Тип 1) (ЛЕВАЯ) Дуб Сильвер;25.04;1;0.089;436");
+
+
         for (String newProductDataLine : newProductData) {
             newProductLineParsed = newProductDataLine.split(";", 0);
             if (isLineNotContainsSKUOnTheFirstPosition(newProductLineParsed))
@@ -137,7 +146,7 @@ public class SVMebel extends BFTCommon {
 
                     //check price
                     if (!existingProductLineParsed[EXISTING_PRODUCT_LINE_INDEX_FIELD_PRICE].equals(newProductLineParsed[NEW_PRODUCT_LINE_INDEX_FIELD_PRICE])) {
-                        productsWithNewPrice.add(existingProductDataLine);
+                        existingProductsWithNewPrice.add(existingProductDataLine);
 //existing that to find in db hashmap the name, take all info and set the name from  new price list
                     }
                 }
@@ -165,7 +174,7 @@ public class SVMebel extends BFTCommon {
         for (String dataFromDBLine : dataFromDB) {
 
             splittedData = dataFromDBLine.split(";", 0);
-            productBrand = String.valueOf(splittedData[DB_LINE_INDEX_FIELD_BRAND]); // brand
+            productBrand = String.valueOf(splittedData[DB_FILE_LINE_INDEX_FIELD_BRAND]); // brand
             if (productBrand.indexOf("\"") != -1)
                 productBrand = productBrand.substring(1, productBrand.length()); // without signs "
             if (!productBrand.equalsIgnoreCase(BRAND))
@@ -173,10 +182,16 @@ public class SVMebel extends BFTCommon {
             isExists = false;
             for (String newProductDataLine : newProductData) {
                 splittedDataNew = newProductDataLine.split(";", 0);
-                sku = String.valueOf(splittedDataNew[0]);
+                if (splittedDataNew.length == 0)
+                    continue;
+                sku = String.valueOf(splittedDataNew[2]);
                 if (sku.contains("\""))
                     sku = sku.substring(1, sku.length()); // without signs "
-                if (String.valueOf(splittedData[DB_LINE_INDEX_FIELD_SKU]).equals(sku)) {
+                String oldProductDataForNewProduct = oldRelationSKUAllInfoHM.get(sku);
+                if (oldProductDataForNewProduct == null || oldProductDataForNewProduct.length() < EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME + 1)
+                    continue;
+                String nameOld = oldProductDataForNewProduct.split(";")[EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME];
+                if (String.valueOf(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME]).equals(nameOld)) {
                     isExists = true;
                 }
             }
@@ -185,7 +200,7 @@ public class SVMebel extends BFTCommon {
             }
         }
 
-        fillData(productsWithNewPrice, newProducts, deleteProducts);
+        fillData(existingProductsWithNewPrice, newProducts, deleteProducts);
 
         ImporterService.saveTOFile(ImporterService.sbExportOne, App.FILE_EXPORT_FIRST);
         ImporterService.saveTOFile(ImporterService.sbExportTwo, App.FILE_EXPORT_SECOND);
@@ -202,13 +217,15 @@ public class SVMebel extends BFTCommon {
         String[] splittedProductInfo;
         //fill changed price
         String infoFromDB = "";
+
+        //existing products
         for (String item : existingProductsNewPrice) {
-            splittedData = item.split(";", 0);
+            splittedData = item.split(";", 0); //old existing line from old file
             //todo: check
             //get the name and with name get ID, then with ID we're going to the new products and set  name and price
 //            infoFromDB = dbData.get("\""+splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME]+"\"");
             infoFromDB = dbData.get(splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME].replaceAll("\"", "").trim());
-            if (infoFromDB == null){
+            if (infoFromDB == null) {
                 infoFromDB = dbData.get(splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME].trim());
             }
             if (infoFromDB == null) { //it is not in the old DB
@@ -371,6 +388,7 @@ public class SVMebel extends BFTCommon {
             splittedData = item.split(";", 0);
             if (splittedData != null && splittedData.length > 0)
                 newRelationSKUAllInfoHM.put(splittedData[NEW_PRODUCT_FILE_INDEX_FIELD_SKU], item); // HashMap <code: info>
+
         }
         return newProductPricesData;
     }
@@ -389,6 +407,7 @@ public class SVMebel extends BFTCommon {
             if (splittedData != null && splittedData.length > 1)
                 oldRelationNameSKUHM.put(splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME]
                         , splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_SKU]); // HashMap <oldname: code info>
+            oldRelationSKUAllInfoHM.put(splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_SKU], item);
         }
     }
 
@@ -405,12 +424,10 @@ public class SVMebel extends BFTCommon {
         for (String item : existingProductDataFromDB) {
             splittedData = item.split(";", 0);
 
-            brand = String.valueOf(splittedData[DB_LINE_INDEX_FIELD_BRAND]);
+            brand = String.valueOf(splittedData[DB_FILE_LINE_INDEX_FIELD_BRAND]);
             if (brand.indexOf("\"") != -1)
                 brand = brand.substring(1, brand.length() - 1); // without signs "
             if (BRAND.equals(brand)) {
-                if (splittedData[DB_FILE_LINE_INDEX_FIELD_NAME].equals("\"Модульная система для гостиной и спальни \"\"ВЕГА К\"\" ВМ-01 Пенал Серия №2 Сосна Карелия\""))
-                    System.out.println("");
                 dbData.put(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME].replaceAll("\"", "").trim(), item); // HashMap <name: all info>
 //                dbData.put(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME].trim(), item); // HashMap <name: all info>
             }

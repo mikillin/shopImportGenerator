@@ -12,10 +12,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+
+//todo: implement delete old products from the database
+
+//
 public class BFTCommon extends ImporterService {
     public final static String SEARCH_URL = "https://bft.by/catalog/?q=";
     public static final String BASE_BFT_URL = "http://bft.by";
-    public final static String FILE_CURRENT_PRODUCTS_DB = "C:\\work\\shop\\db.csv"; //todo: check always
+
     public static final String[] REDUNDANT_PRODUCT_CODE_WORDS = {};
     public static ArrayList<String> NEW_PRODUCTS_PRICES_FILES_LIST =
             new ArrayList<>(Arrays.asList(
@@ -32,24 +36,14 @@ public class BFTCommon extends ImporterService {
 
 
     public static String getBFTProductURL(String subURL) {
-        if (subURL.indexOf("noimage") == -1)
+        if (subURL.equals(""))
+            return subURL;
+        else if (subURL.indexOf("noimage") == -1)
             return BASE_BFT_URL + subURL;
         else
             return subURL;
     }
 
-
-    public static void setAsDeletedObsoleteProducts(ArrayList<String> deleteProducts) {
-
-        for (String lineToHide : deleteProducts) {
-
-            ProductImporter pi = new ProductImporter();
-            pi.setSKU(String.valueOf(lineToHide.split(";")[0]));
-            pi.setStatus("0");
-
-            ImporterService.sbExportTwo.append(pi);
-        }
-    }
 
     public static boolean isLineNotContainsSKUOnTheFirstPosition(String[] arrayOfLineSplitData) {
         return arrayOfLineSplitData.length == 0 || arrayOfLineSplitData[0] == null || arrayOfLineSplitData[0].length() == 1 || "".equals(arrayOfLineSplitData[0]) || StringUtils.isEmpty(arrayOfLineSplitData[0]);
@@ -114,17 +108,5 @@ public class BFTCommon extends ImporterService {
 
     }
 
-    public static ArrayList<String> getAllDataFromCSVFile(String fileSource) throws FileNotFoundException {
 
-        ArrayList<String> al = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileSource))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null)
-                // if (line.matches(PRODUCT_ONLY_PATTERN))      // choose only goods info
-                al.add(line);
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return al;
-    }
 }

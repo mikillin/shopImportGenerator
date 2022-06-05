@@ -59,13 +59,15 @@ public class CategoryProcessingService {
             "Столешница",
             "Рамка для столешницы",
             "Основание для стола",
-            "Каркас табурета",
-            "Каркас стула",
-            "Спинка стула",
+            "Каркас",
+            "Каркас",
+            "Спинка",
             "Основание",
             "Стойка",
             "Колеса для компьютерных кресел",
             "Тумба ТВ",
+            "Матрац",
+            "Матрас"
 
     };
     public static final String[] PRODUCT_NAMES_EXCEPTION_COMPLEX_PATTERN_LIST = {
@@ -114,7 +116,7 @@ public class CategoryProcessingService {
             add(Map.of("Набор для школьников и студентов с рабочим местом", new InnerClass("Мебель для детской комнаты", "Набор для школьников и студентов с рабочим местом")));
 
             add(Map.of("Диван,Евродиван", new InnerClass("Мебель для гостиной", "Диваны")));
-            add(Map.of("Журнальные столики, Столик журнальный,Стол журнальный,стола журнальны,Стол Квадро,Стол СТЖ,Стол Бруклин", new InnerClass("Мебель для гостиной", "Столы журнальные")));
+            add(Map.of("Журнальные столики, Столик журнальный,Стол журнальный,стола журнальны,Стол Квадро,Стол СТЖ,Стол Бруклин", new InnerClass("Мебель для гостиной", "Журнальные столики")));
             add(Map.of("Cтенка,Стенка,Гостиная,Набор мебели для гостиной,Центральная секция,Модульная стенка,Марта-15", new InnerClass("Мебель для гостиной", "Гостиные")));
             add(Map.of("Кресло,Кресло.*подставка,Комплект ножек", new InnerClass("Мебель для гостиной", "Кресла")));
             add(Map.of("Комплект подсветки", new InnerClass("Мебель для гостиной", "Комплекты подсветки")));
@@ -134,58 +136,58 @@ public class CategoryProcessingService {
     };
 public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATION_REGEX_RULES = new ArrayList<Map<String, InnerClass>>() {
         {
-            add(Map.of("", new InnerClass("Мебель для спальни", "Спальные гарнитуры")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Туалетные столики")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Кровати")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Полки для кровати")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Комоды")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Тумбы")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Зеркала")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы-купе")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы-пеналы")));
-            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы,стеллажи")));
-
-            add(Map.of("", new InnerClass("Мебель для прихожей", "Прихожие")));
-            add(Map.of("", new InnerClass("Мебель для прихожей", "Модульные прихожие")));
-            add(Map.of("", new InnerClass("Мебель для прихожей", "Наборы мебели для прихожей")));
-            add(Map.of("", new InnerClass("Мебель для прихожей", "Вешалки")));
-            add(Map.of("", new InnerClass("Мебель для прихожей", "Тумбы")));
-            add(Map.of("", new InnerClass("Мебель для прихожей", "Угловые окончания")));
-
-
-            add(Map.of("", new InnerClass("Мебель для кухни", "Кухни")));
-            add(Map.of("", new InnerClass("Мебель для кухни", "Кухонные диваны, уголки")));
-            add(Map.of("", new InnerClass("Мебель для кухни", "Кухонные столы")));
-            add(Map.of("", new InnerClass("Мебель для кухни", "Обеденные столы и группы")));
-            add(Map.of("", new InnerClass("Мебель для кухни", "Стулья для кухни")));
-            add(Map.of("", new InnerClass("Мебель для кухни", "Барные стулья")));
-            add(Map.of("", new InnerClass("Мебель для кухни", "Барные столы")));
-            add(Map.of("", new InnerClass("Мебель для кухни", "Кухонные сушки")));
-
-            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Наборы детской мебели")));
-            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Компьютерные столы ")));
-            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Компьютерные кресла")));
-            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Письменные столы")));
-            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Уголоки школьника")));
-            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Набор для школьников и студентов с рабочим местом")));
-
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Диваны")));
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Столы журнальные")));
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Гостиные")));
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Кресла")));
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Комплекты подсветки")));
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Софы")));
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Консоли")));
-            add(Map.of("", new InnerClass("Мебель для гостиной", "Угловые окончания")));
-
-            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Гамаки")));
-            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Декор для дома")));
-            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Полки")));
-            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Детские качели")));
-            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Антресоли")));
-            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Ширмы")));
-            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Шезлонги")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Спальные гарнитуры")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Туалетные столики")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Кровати")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Полки для кровати")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Комоды")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Тумбы")));
+             add(Map.of("Мебель для гостиной / Набор мебели для гостиной .* (Зеркало)", new InnerClass("Мебель для спальни", "Зеркала")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы-купе")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы-пеналы")));
+//            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы,стеллажи")));
+//
+//            add(Map.of("", new InnerClass("Мебель для прихожей", "Прихожие")));
+//            add(Map.of("", new InnerClass("Мебель для прихожей", "Модульные прихожие")));
+//            add(Map.of("", new InnerClass("Мебель для прихожей", "Наборы мебели для прихожей")));
+//            add(Map.of("", new InnerClass("Мебель для прихожей", "Вешалки")));
+//            add(Map.of("", new InnerClass("Мебель для прихожей", "Тумбы")));
+//            add(Map.of("", new InnerClass("Мебель для прихожей", "Угловые окончания")));
+//
+//
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Кухни")));
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Кухонные диваны, уголки")));
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Кухонные столы")));
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Обеденные столы и группы")));
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Стулья для кухни")));
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Барные стулья")));
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Барные столы")));
+//            add(Map.of("", new InnerClass("Мебель для кухни", "Кухонные сушки")));
+//
+//            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Наборы детской мебели")));
+//            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Компьютерные столы ")));
+//            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Компьютерные кресла")));
+//            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Письменные столы")));
+//            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Уголоки школьника")));
+//            add(Map.of("", new InnerClass("Мебель для детской комнаты", "Набор для школьников и студентов с рабочим местом")));
+//
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Диваны")));
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Столы журнальные")));
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Гостиные")));
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Кресла")));
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Комплекты подсветки")));
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Софы")));
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Консоли")));
+//            add(Map.of("", new InnerClass("Мебель для гостиной", "Угловые окончания")));
+//
+//            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Гамаки")));
+//            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Декор для дома")));
+//            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Полки")));
+//            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Детские качели")));
+//            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Антресоли")));
+//            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Ширмы")));
+//            add(Map.of("", new InnerClass("Сопутствующие товары для дома", "Шезлонги")));
 
         }
     };
@@ -253,7 +255,7 @@ public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATI
                     add(Map.of("Компьютерные столы", new InnerClass("Мебель для детской комнаты", "Компьютерные столы")));
                     add(Map.of("Модульная детская мебель", new InnerClass("Мебель для детской комнаты", "Модульная детская мебель")));
                     add(Map.of("Диваны", new InnerClass("Мебель для гостиной", "Диваны")));
-                    add(Map.of("Журнальные столики", new InnerClass("Мебель для гостиной", "Журнальные столики")));
+                    add(Map.of("Журнальные столики", new InnerClass("Мебель для гостиной", "Столы журнальные")));
                     add(Map.of("Стенки", new InnerClass("Мебель для гостиной", "Стенки")));
                     add(Map.of("Гамаки", new InnerClass("Сопутствующие товары для дома", "Гамаки")));
                     add(Map.of("Декор для дома", new InnerClass("Сопутствующие товары для дома", "Декор для дома")));
@@ -284,7 +286,7 @@ public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATI
                     add(new InnerClass("Детские кровати", ""));
                     add(new InnerClass("Тумбы под телевизор", ""));
                     add(new InnerClass("Мебель для прихожей", "Обувницы"));
-                    add(new InnerClass("Кухни", ""));
+                    add(new InnerClass("Мебель для кухни", "Кухни"));
                 }
             },
             "Halmar", new ArrayList<InnerClass>() {

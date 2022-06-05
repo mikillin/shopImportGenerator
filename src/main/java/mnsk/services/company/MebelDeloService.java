@@ -12,7 +12,10 @@ import org.jsoup.select.Elements;
 
 import java.util.*;
 
-
+/**
+ * 1. Upload new DB file from the reg.ru
+ * check , . ; which are here needed
+ */
 public class MebelDeloService extends ImporterService {
 
     private final static int PRODUCT_CODE_SOURCE_CSV_INDEX = 0;
@@ -21,8 +24,12 @@ public class MebelDeloService extends ImporterService {
     public static final String SELECTOR_FOR_PAGINATION_LAST_ELEMENT_LINK = ".pagination-item:last-of-type>a";
     public static final String SELECTOR_FOR_PRODUCTS = ".product-thumb";
     public static final String BRAND = "MD";
+    static HashMap<String, String> dbData = new HashMap<>(); //main base with old existing data
+
 
     public static void getProductData() {
+
+        dbData = fillDBDataHSForExactBrand(BRAND);
 
 
         try {
@@ -39,6 +46,11 @@ public class MebelDeloService extends ImporterService {
                 productTypesPagesHS.add(subURL.attr("href"));
             }
 
+
+            //todo: delete>
+//            productTypesPagesHS.clear();
+//            productTypesPagesHS.add("/katalog/kuhonnye_garnitury/kuhonnye_garnitury1.html");
+            //todo: delete<
             Set<String> productsPagesLinks = new HashSet<>();
             for (String page : productTypesPagesHS) {
 
@@ -50,13 +62,11 @@ public class MebelDeloService extends ImporterService {
                     productsPagesLinks.add(page);
                 } else {
                     int lastElementIndex = Integer.parseInt(elements.attr("title"));
-                    for (int pageIndex = 0; pageIndex < lastElementIndex; pageIndex++) {
+                    for (int pageIndex = 1; pageIndex <= lastElementIndex; pageIndex++) {
                         productsPagesLinks.add(page + "?cat_page=" + pageIndex + "#cat");
 
                     }
                 }
-
-
             }
 
             List<String> productLinks = new ArrayList<>();
@@ -83,6 +93,7 @@ public class MebelDeloService extends ImporterService {
             }
 
 
+            ArrayList<String> allProductNames = new ArrayList<>();
             //fill files
             for (String productLink : productLinks) {
                 preview = ImporterService.getHTMLDocument(productLink);
@@ -90,8 +101,16 @@ public class MebelDeloService extends ImporterService {
 
                 processProduct(preview);
 
+                String name = "";
+                if (preview.select(".block-order.box h1[itemprop=name]") != null)
+                    name = preview.select(".block-order.box h1[itemprop=name]").text();
+                else
+                    System.err.println(">>> achtung! : ");
+                allProductNames.add(name);
+
             }
 
+            processDeleteObsoleteProducts(allProductNames);
 
             System.out.printf("---");
             ImporterService.saveTOFile(ImporterService.sbExportOne, App.FILE_EXPORT_FIRST);
@@ -105,67 +124,118 @@ public class MebelDeloService extends ImporterService {
     }
 
 
+    private static void processDeleteObsoleteProducts(ArrayList<String> allProductNames) {
+        ArrayList<String> deleteProducts = new ArrayList<>();
+        boolean isExists;
+        for (String key : dbData.keySet()) {
+
+            isExists = false;
+            for (String productName : allProductNames) {
+                if (key.equals(productName.replaceAll(",", ".").replaceAll("\"", "").trim())) {
+                    isExists = true;
+                    break;
+                }
+            }
+            if (!isExists) {
+                deleteProducts.add(dbData.get(key));
+            }
+
+        }
+        setAsDeletedObsoleteProducts(deleteProducts);
+
+    }
+
     private static void processProduct(Document product) {
 
         if (product != null) {
             try {
+
+                String name = "";
+                if (product.select(".block-order.box h1[itemprop=name]") != null)
+                    name = product.select(".block-order.box h1[itemprop=name]")
+                            .text()
+                            .replaceAll(",",".")
+                            .replaceAll("\"","");
+                else
+                    System.err.println(">>> achtung! : ");
+
+                CategoryProcessingService.InnerClass siteCategoryInfo = CategoryProcessingService.getSiteCategoryNames(name);
+                if (CategoryProcessingService.isProductTypeVorbidden(BRAND, siteCategoryInfo.categoryName, siteCategoryInfo.subcategoryName, name))
+                    return;
+
                 ImportNode in = new ImportNode();
                 ProductImporter pi = new ProductImporter();
 
 
-                String description = product.select("div.product-description").text();
+                if (dbData.get(name) != null) {
+                    String[] dbSplittedData = dbData.get(name).split(";", -1);
+                    in.setSku(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_SKU]);
+                    in.setName(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_NAME]);
+                    in.setImage(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_IMAGE]);
 
-                String category = "";
-                if (product.select("span.B_crumbBox .B_crumb").size() > 0)
-                    category = product.select("span.B_crumbBox .B_crumb").get(1).text();
-                else
-                    System.err.println(">>> achtung! : ");
+                    in.setPRICE_CURRENCY(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_CURRENCY]);
+                    pi.setSKU(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_SKU]);
+                    pi.setName(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_NAME]);
+                    pi.setBrand(BRAND);
+                    pi.setStatus(PRODUCT_TO_PUBLISH_STATUS);
+                    pi.setMaterial(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_MATERIAL]);
+                    pi.setGabarity(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_SIZE]);
+                    pi.setOpisanie(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_DESCRIPTION]);
 
-
-                String podcategory = "";
-                if (product.select("span.B_crumbBox .B_crumb").size() > 1) {
-                    podcategory = product.select("span.B_crumbBox .B_crumb").get(2).text();
+                    pi.setCategory(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_CATEGORY]);
+                    pi.setPod_category(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_SUBCATEGORY]);
                 } else {
-                    System.err.println(">>> achtung! : ");
+
+                    String description = product.select("div.product-description").text();
+
+                    String cathegoryMainFromVendorSite = "";
+                    if (product.select("span.B_crumbBox .B_crumb").size() > 0)
+                        cathegoryMainFromVendorSite = product.select("span.B_crumbBox .B_crumb").get(1).text();
+                    else
+                        System.err.println(">>> achtung! : ");
+
+
+                    String subCathegoryFromVendorSite = "";
+                    if (product.select("span.B_crumbBox .B_crumb").size() > 1) {
+                        subCathegoryFromVendorSite = product.select("span.B_crumbBox .B_crumb").get(2).text();
+                    } else {
+                        System.err.println(">>> achtung! : ");
+                    }
+                    //
+
+                    String material = "";
+                    String gabarity = "";
+
+
+                    String tmpImageNames = saveImageOnDisk(BASE_URL + product.select("div.fotorama>a#fotoRam").attr("href"));
+
+
+                    in.setSku(String.valueOf(App.BEGIN_ARTICLE_NUMBER++));
+                    in.setName(name);
+                    in.setImage(tmpImageNames);
+                    in.setPRICE_CURRENCY(PRICE_CURRENCY);
+                    pi.setSKU(in.getSku());
+                    pi.setName(in.getName());
+                    pi.setBrand(BRAND);
+                    pi.setStatus(PRODUCT_TO_PUBLISH_STATUS);
+                    pi.setMaterial(material);
+                    pi.setGabarity(gabarity);
+                    pi.setOpisanie(description);
+
+                    pi.setCategory(siteCategoryInfo.categoryName);
+                    pi.setPod_category(siteCategoryInfo.subcategoryName);
                 }
-                //
-                if (CategoryProcessingService.isProductTypeVorbidden("MD", category, podcategory))
-                    return;
-                String material = "";
-                String gabarity = "";
+
                 String price = "";
                 if (product.select("span.new-price [itemprop=price]") != null)
                     price = product.select("span.new-price [itemprop=price]").text();
                 else
                     System.err.println(">>> achtung! : ");
-                String name = "";
-                if (product.select(".block-order.box h1[itemprop=name]") != null)
-                    name = product.select(".block-order.box h1[itemprop=name]").text();
-                else
-                    System.err.println(">>> achtung! : ");
 
+                in.setPrice(String.valueOf(Integer.parseInt(price.replaceAll(" ", "")) * 10000));
 
-                String tmpImageNames = saveImageOnDisk(BASE_URL + product.select("div.fotorama>a#fotoRam").attr("href"));
-
-
-                in.setSku(String.valueOf(App.BEGIN_ARTICLE_NUMBER++));
-                in.setName(name);
-                in.setImage(tmpImageNames);
-                in.setPrice(String.valueOf(Integer.parseInt(price) * 10000));
-                in.setPRICE_CURRENCY("BYR");
-                pi.setSKU(in.getSku());
-                pi.setName(in.getName());
-                pi.setBrand(BRAND);
-                pi.setStatus("1");
-                pi.setMaterial(material);
-                pi.setGabarity(gabarity);
-                pi.setOpisanie(description);
-
-                pi.setCategory(category);
-                pi.setPod_category(podcategory);
                 sbExportOne.append(in.toString());
                 sbExportTwo.append(pi.toString());
-
             } catch (Exception exc) {
                 System.err.println(">> not right link: " + product.baseUri());
             }

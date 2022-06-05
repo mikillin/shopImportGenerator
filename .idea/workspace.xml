@@ -5,40 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3c8e9795-a167-4dc2-83dd-59e3ff029ab9" name="Changes" comment="Still work on the classification rules">
-      <change afterPath="$PROJECT_DIR$/9700.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9701.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9702.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9703.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9704.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/9705.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/SendEmail.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/DomParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BFTCommon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftDBService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelMinskMontanjaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelMinskSoldatovService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/ReconfigureDBService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/index2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/index3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/DomBYYMLService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/CategoryProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/CategoryProcessingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/ImporterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/ImporterService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/CategoryProcessingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/CategoryProcessingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/HalmarService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/HalmarPLService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/LoadAllBftProductsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BFTCommon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BFTCommon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftDBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/BftDBService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelDeloService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelDeloService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/ReconfigureDBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/ReconfigureDBService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sokol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mnsk/services/company/Sokol.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/App$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/App$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/App$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/App$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/App.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/ImporterService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/ImporterService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/BftService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/BftService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/HalmarService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/LoadAllBftProductsService.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/mnsk/services/company/MebelDeloService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mnsk/services/company/MebelDeloService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +77,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -174,7 +156,9 @@
       <workItem from="1652386975127" duration="235000" />
       <workItem from="1652942198126" duration="10725000" />
       <workItem from="1653588260021" duration="89879000" />
-      <workItem from="1654019101767" duration="32452000" />
+      <workItem from="1654019101767" duration="81124000" />
+      <workItem from="1654246399650" duration="1612000" />
+      <workItem from="1654250337234" duration="67634000" />
     </task>
     <task id="LOCAL-00001" summary="Still work on the classification rules">
       <created>1650395764242</created>
@@ -208,17 +192,78 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java</url>
-          <line>233</line>
-          <option name="timeStamp" value="19" />
+          <line>231</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java</url>
+          <line>148</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java</url>
+          <line>175</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/Sheffilton.java</url>
+          <line>154</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelDeloService.java</url>
+          <line>112</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/MebelDeloService.java</url>
+          <line>54</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/App.java</url>
+          <line>98</line>
+          <option name="timeStamp" value="90" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java</url>
-          <line>182</line>
-          <option name="timeStamp" value="22" />
+          <line>154</line>
+          <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/SVMebel.java</url>
+          <line>324</line>
+          <option name="timeStamp" value="112" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/DomBYYMLService.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="113" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="in.getName().indexOf(&quot;Каркас&quot;)!=-1" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/company/ReconfigureDBService.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="117" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mnsk/services/CategoryProcessingService.java</url>
+          <line>336</line>
+          <option name="timeStamp" value="119" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="CategoryProcessingService.isProductTypeVorbidden(pi.getBrand(), inner.categoryName, inner.subcategoryName, inner.categoryName)" language="JAVA" />
+        <watch expression="inner.categoryName" language="JAVA" />
+        <watch expression="inner.subcategoryName" language="JAVA" />
+        <watch expression="pi.getBrand()" language="JAVA" />
+        <watch expression="in.getName()" language="JAVA" />
+        <watch expression="PRODUCT_NAMES_EXCEPTION_PATTERN_LIST" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

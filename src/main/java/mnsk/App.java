@@ -9,7 +9,9 @@ import mnsk.services.ImporterService;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,7 +31,11 @@ public class App {
     public final static String CSV_SEPARATOR = ";";
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
-    public static int BEGIN_ARTICLE_NUMBER = 9700;
+    public static int BEGIN_ARTICLE_NUMBER = 11306;
+    // 11200 -11305 SV-Мебель
+    // 10650 -11195  MD
+    //10564 - 10612 Собственное производство
+    // Sheffilton 9700 - 10075,
     // Signal 9600 - 9700
     // Монтанья 9500 - 9600
     // soldatov 9300 - 9500
@@ -55,7 +61,7 @@ public class App {
     static int skuBegin = 0;
 
     public static void main(String[] args) {
-
+        System.out.println("Start:" + new SimpleDateFormat("dd.MM.yyyy hh:mm:ss").format(new Date()));
         ///// TODO: CHECK THE STRUCTURE OF THE DB FILE- IT IS NEW- OPISANIE IS ADDED
         //  System.out.print(CategoryProcessingService.isProductWithNameVorbidden("Основание для стола"));
 //        System.out.println("");
@@ -65,11 +71,17 @@ public class App {
 //        SheffiltonItems();
 //        SoldatovItems();
 //        MontanjaItems();
-        //  ReconfigureItems();
-        svMEBELItems();
+          ReconfigureItems();
+        //   svMEBELItems();
 //        allSignalHalmarItems();
 //        BFT2FilesItems();
-        //MebelDeloService.getProductData();
+
+//        MebelDeloService.getProductData();
+
+
+        // domByYMLService();
+
+
         //importMainData();
         //updateLastSKU(); //obligatory
         //  importMainData("common");
@@ -77,6 +89,19 @@ public class App {
         //     updateBFTPrices("common");
         //exportDataTOFileSignalHalmar();
         // - createNewListOFProductsBFT();
+//        System.out.print(">>" + CategoryProcessingService.getSiteCategoryNames("Мебель для гостиной / Набор мебели для гостиной Гостиная К №7 (Зеркало)"));
+
+
+        CategoryProcessingService.InnerClass siteCategoryInfo =
+        CategoryProcessingService.getSiteCategoryNames("Каркас стула Sheffilton");
+        System.out.println("category: " + siteCategoryInfo.categoryName);
+        System.out.println("subcategory: " + siteCategoryInfo.subcategoryName);
+//        if (CategoryProcessingService.isProductTypeVorbidden("MD", siteCategoryInfo.categoryName, siteCategoryInfo.subcategoryName, "Кухня КГ-1 1.8 м (белый/бетон)"))
+        System.out.println(CategoryProcessingService.isProductTypeVorbidden("Каркас стула Sheffilton"));
+
+
+        //System.out.print(">>" + CategoryProcessingService.isProductTypeVorbidden("Кухня КГ-1 1.8 м (белый/бетон)"));
+        System.out.println("Finish:" + new SimpleDateFormat("dd.MM.yyyy hh:mm:ss").format(new Date()));
     }
 
     static void updateLastSKU() {
@@ -134,7 +159,12 @@ public class App {
     }
 
 
-    static void MontanjaItems() {
+    static void domByYMLService() {
+        ImporterService is = new DomBYYMLService();
+        is.getData();
+    }
+
+   static void MontanjaItems() {
         ImporterService is = new MebelMinskMontanjaService();
         is.getData();
     }

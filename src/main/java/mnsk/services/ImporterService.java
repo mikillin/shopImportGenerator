@@ -2,6 +2,7 @@ package mnsk.services;
 
 
 import mnsk.App;
+import mnsk.beans.export.ProductImporter;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,6 +16,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Author: S.Rogachevsky
@@ -22,12 +25,56 @@ import java.nio.file.StandardCopyOption;
  * Time: 22:57
  */
 public abstract class ImporterService {
+    public static final int DB_FILE_LINE_INDEX_FIELD_SKU = 0;
+    public static final int DB_FILE_LINE_INDEX_FIELD_NAME = 1;
+    public static final int DB_FILE_LINE_INDEX_FIELD_PRICE = 2;
+    public static final int DB_FILE_LINE_INDEX_FIELD_CURRENCY = 3;
+    public static final int DB_FILE_LINE_INDEX_FIELD_BRAND = 4;
+    public static final int DB_FILE_LINE_INDEX_FIELD_CATEGORY = 5;
+    public static final int DB_FILE_LINE_INDEX_FIELD_SUBCATEGORY = 6;
+    public static final int DB_FILE_LINE_INDEX_FIELD_MATERIAL = 7;
+    public static final int DB_FILE_LINE_INDEX_FIELD_TYPE = 8;
+    public static final int DB_FILE_LINE_INDEX_FIELD_DESCRIPTION = 9;
+    public static final int DB_FILE_LINE_INDEX_FIELD_IMAGE = 10;
+    public static final int DB_FILE_LINE_INDEX_FIELD_STATUS = 11;
+    public static final int DB_FILE_LINE_INDEX_FIELD_BUDGET = 12;
+    public static final int DB_FILE_LINE_INDEX_FIELD_USTANOVKA = 13;
+    public static final int DB_FILE_LINE_INDEX_FIELD_DOSTAVKA = 14;
+    public static final int DB_FILE_LINE_INDEX_FIELD_SIZE = 15;
+    public static final int DB_FILE_LINE_INDEX_FIELD_PRIZNAK = 16;
+    public static final String PRICE_CURRENCY = "BYR";
+    public static final String PRODUCT_TO_PUBLISH_STATUS = "1";
+    public static final String PRODUCT_TO_HIDE_STATUS = "0";
+
+
+
+    public final static String FILE_CURRENT_PRODUCTS_DB = "C:\\work\\shop\\db.csv";
+    public static final String FILE_NO_IMAGE_PATH = "C:\\work\\shop\\noimage.jpg";
+
+
     public static StringBuffer sbExportOne = new StringBuffer();
     public static StringBuffer sbExportTwo = new StringBuffer();
 
 
     public abstract void getData();
 
+
+    /**
+     * input - csv line from db sql
+     * @param deleteProducts
+     */
+    public static void setAsDeletedObsoleteProducts(ArrayList<String> deleteProducts) {
+
+        for (String lineToHide : deleteProducts) {
+
+            ProductImporter pi = new ProductImporter();
+            pi.setSKU(String.valueOf(lineToHide.split(";")[DB_FILE_LINE_INDEX_FIELD_SKU]));
+            pi.setName(lineToHide.split(";")[DB_FILE_LINE_INDEX_FIELD_NAME]);
+            pi.setStatus(PRODUCT_TO_HIDE_STATUS);
+
+            ImporterService.sbExportTwo.append(pi);
+        }
+    }
 
     public static void saveTOFile(StringBuffer sb, String fileName) {
 
@@ -120,6 +167,7 @@ public abstract class ImporterService {
 
         } catch (IOException e) {
             e.printStackTrace();
+            imageFileName = "noimage.jpg";
         }
 
         return App.IMAGE_FILE_PATH + imageFileName;
@@ -147,9 +195,9 @@ public abstract class ImporterService {
         imageFileName = String.valueOf(App.BEGIN_ARTICLE_NUMBER) + App.SAVED_FILES_EXTENSION;
 
 
-        if (link.indexOf("noimage") != -1) { //local file
+        if (link.indexOf("noimage") != -1 || link.equals("")) { //local file
             try {
-                Files.copy(new FileInputStream(link), Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(new FileInputStream(FILE_NO_IMAGE_PATH), Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -163,10 +211,51 @@ public abstract class ImporterService {
             } catch (IOException e) {
                 System.err.println("Link : " + link);
                 e.printStackTrace();
+                imageFileName = "noimage.jpg";
             }
         }
 
         return App.IMAGE_FILE_PATH + imageFileName;
+    }
+
+
+    public static HashMap fillDBDataHSForExactBrand(String brand) {
+        ArrayList<String> existingProductDataFromDB = new ArrayList();
+        HashMap<String, String> dbData = new HashMap<>();
+        try {
+            existingProductDataFromDB = getAllDataFromCSVFile(FILE_CURRENT_PRODUCTS_DB);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String[] splittedData;
+        String fieldBrand = "";
+        for (String item : existingProductDataFromDB) {
+            splittedData = item.split(";", 0);
+
+            fieldBrand = String.valueOf(splittedData[DB_FILE_LINE_INDEX_FIELD_BRAND]);
+            if (fieldBrand.indexOf("\"") != -1)
+                fieldBrand = fieldBrand.substring(1, fieldBrand.length() - 1); // without signs "
+            if (brand.equals(fieldBrand)) {
+                dbData.put(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME]
+                         .replaceAll(",", ".") //todo: check
+                        .replaceAll("\"", "")
+                        .trim(), item); // HashMap <name: all info>
+            }
+        }
+        return dbData;
+    }
+
+    public static ArrayList<String> getAllDataFromCSVFile(String fileSource) throws FileNotFoundException {
+
+        ArrayList<String> al = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileSource))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+                al.add(line);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return al;
     }
 
 

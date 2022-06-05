@@ -307,21 +307,6 @@ public class BftDBService extends ImporterService {
     }
 
 
-    private static List<String> getAllDataFromCSVFile(String fileSource) throws FileNotFoundException {
-
-        List<String> al = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileSource))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null)
-                if (line.matches(PRODUCT_ONLY_PATTERN))      // choose only goods info
-                    al.add(line);
-
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return al;
-    }
-
     public static List<String> getSpecialIDFromBFTCSVPriceFile(String fileSource) throws FileNotFoundException {
 
         List<String> al = new ArrayList<>();

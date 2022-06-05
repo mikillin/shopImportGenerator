@@ -39,8 +39,8 @@ public class ReconfigureDBService extends ImporterService {
         for (String[] items : dbData) {
 
             try {
-                if (isProductTypeVorbidden(items[1]))
-                    continue;
+//                if (isProductTypeVorbidden(items[1]))
+//                    continue;
                 pi = new ProductImporter();
                 in = new ImportNode();
 
@@ -65,7 +65,7 @@ public class ReconfigureDBService extends ImporterService {
                 pi.setCategory(inner.categoryName);
                 pi.setPod_category(inner.subcategoryName);
                 pi.setStatus(items[11].equals("0") ? "0"
-                        : (CategoryProcessingService.isProductTypeVorbidden(pi.getBrand(), inner.categoryName, inner.subcategoryName, inner.categoryName) ? "0" : "1"));
+                        : (CategoryProcessingService.isProductTypeVorbidden(pi.getBrand(), inner.categoryName, inner.subcategoryName, in.getName()) ? "0" : "1"));
                 ImporterService.sbExportOne.append(in);
                 ImporterService.sbExportTwo.append(pi);
 
@@ -80,17 +80,7 @@ public class ReconfigureDBService extends ImporterService {
         System.out.println("Hello! ");
     }
 
-    private static ArrayList<String> getAllDataFromCSVFile(String fileSource) throws FileNotFoundException {
 
-        ArrayList<String> al = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileSource))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) al.add(line);
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return al;
-    }
 
 
     private void fillDataFromDB() {
