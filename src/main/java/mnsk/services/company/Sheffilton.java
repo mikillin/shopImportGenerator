@@ -30,6 +30,10 @@ public class Sheffilton extends BFTCommon {
 
     //TODO::: CHECK dot, komma, ; as separate sign in all files
 
+    //TODO: delete column with pics
+    //TODO: delete column with description
+
+
     public static final String BRAND = "Sheffilton";
     public static final int NEW_PRODUCT_FILE_INDEX_FIELD_SKU = 1; // todo: check please
     public static final int NEW_PRODUCT_FILE_INDEX_FIELD_NAME = 2; // todo: check please

@@ -29,6 +29,7 @@ public class ImportNode {
     }
 
     public void setName(String name) {
+        name.replaceAll("\"","");
         this.name = name;
     }
 

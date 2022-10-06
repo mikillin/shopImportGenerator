@@ -31,13 +31,19 @@ public class App {
     public final static String CSV_SEPARATOR = ";";
     public final static String CSV_END_LINE = System.lineSeparator();
     public final static String IMAGE_FILE_PATH = "public://";
-    public static int BEGIN_ARTICLE_NUMBER = 11306;
+    public static int BEGIN_ARTICLE_NUMBER = 12504; // sv мебель самый точный расчет
 
     //todo: сделать удаление если нет в базе: проход по базе если нет в новом прайсе - удалить.
-
+    //12194 -  12503 Сокол Мебель 06.10
+    //11626 - 12193 MD 12.09
+    //11562 - 11625 NN Мебель 18.08
+    //11559 - 11561 СВ Мебель 18.08
+    //11392 - 11558 СВ Мебель 26.07
+    // 11370- 1391 - Sokol
+    // 11306- 1369 - MD
     // 11200 -11305 SV-Мебель
     // 10650 -11195  MD
-    //10564 - 10612 Собственное производство
+    // 10564 - 10612 Собственное производство
     // Sheffilton 9700 - 10075,
     // Signal 9600 - 9700
     // Монтанья 9500 - 9600
@@ -70,19 +76,20 @@ public class App {
 //        System.out.println("");
 
 //        System.out.printf("-->"  + CategoryProcessingService.CLASSIFICATION_RULES.get("Signal"));
-        //     SokolMEBELItems();
-//        SheffiltonItems();
+//            SokolMEBELItems();
+//       SheffiltonItems();
 //        SoldatovItems();
 //        MontanjaItems();
-                            ReconfigureItems();
-        //   svMEBELItems();
+//                   ReconfigureItems();
+//           svMEBELItems();
+//           NNMEBELItems();
 //        allSignalHalmarItems();
 //        BFT2FilesItems();
 
 //        MebelDeloService.getProductData();
 
 
-        // domByYMLService();
+        domByYMLService();
 
 
         //importMainData();
@@ -168,7 +175,7 @@ public class App {
         is.getData();
     }
 
-   static void MontanjaItems() {
+    static void MontanjaItems() {
         ImporterService is = new MebelMinskMontanjaService();
         is.getData();
     }
@@ -199,6 +206,10 @@ public class App {
         is.getData();
     }
 
+    static void NNMEBELItems() {
+        ImporterService is = new NNMebel();
+        is.getData();
+    }
 
     static void allSignalHalmarItems() {
 

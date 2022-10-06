@@ -8,12 +8,18 @@ import mnsk.beans.export.ProductImporter;
 import mnsk.services.CategoryProcessingService;
 import mnsk.services.ImporterService;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+//todo: !!!! нужен только 1 файл с корпусной мебелью остальные просто столешницы и т.д.
+//todo: check indeces of fields
+//TODO::: CHECK dot, komma, ; as separate sign in all files
+//Todo: check the first line, mostly it is halved on 2 parts
+
+
 //new csv file format: Артикул;Номенклатура;Розница
 //old csv file format: Номенклатура.Артикул ;Ценовая группа/ Номенклатура/ Характеристика номенклатуры;Опт с НДС;Розница;;
 //db file format: "sku";"name";"price";"price_currency";"brand";"category";"pod_category";"material";"type";"image";"status";"budget";"ustanovka";"dostavka";"gabarity";"priznak"
@@ -23,45 +29,44 @@ import java.util.HashMap;
  * Date: 11.02.17
  * Time: 11:59
  */
-
-// TODO: ************************
-// !!!! TODO: нужно указать старый файл с ценами и новый. тогда по коду все возьмется, а по имени там полная неразбериха. имена меняются постоянно на одни и те же модели
-// TODO: ************************
-//// TODO: replace in file __online__ all ";" and "," to "."
-/// TODO: replace in the _downloaded_ csv file all "," to ";"
-
-
-    // мудотень  с новыми и старыыми товарами. с нвоой ценой ставт как будто новый, а потом ставит ему 0 статус.
-
-
-public class Sokol extends BFTCommon {
-
+public class NNMebel extends BFTCommon {
     //TODO: fill the files
-    public static final String BRAND = "Сокол мебель";
-    public static final int EXISTING_PRODUCT_FILE_INDEX_FIELD_SKU = 0;
-    public static final int EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME = 1;
-    public static final int EXISTING_PRODUCT_FILE_INDEX_FIELD_BRAND = 4;
+//!!!!
+    //TODO::: CHECK dot, komma, ; as separate sign in all files
+
+    public static final String BRAND = "NN-Мебель";
+    public static final int EXISTING_PRODUCT_FILE_INDEX_FIELD_SKU = 1; //todo: !!! always make test of the indeces below
+    public static final int EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME = 2; //todo:check please
     public static final int EXISTING_PRODUCT_LINE_INDEX_FIELD_PRICE = 7;
-    public static final int NEW_PRODUCT_FILE_INDEX_FIELD_SKU = 0;
-    public static final int NEW_PRODUCT_FILE_INDEX_FIELD_NAME = 1;
-    public static final int NEW_PRODUCT_FILE_INDEX_FIELD_PRICE = 2; //TODO: !!!!
-    public static final int NEW_PRODUCT_LINE_INDEX_FIELD_PRICE = 2; //TODO: !!!!
+    public static final int NEW_PRODUCT_FILE_INDEX_FIELD_SKU = 1; // todo: check please
+    public static final int NEW_PRODUCT_FILE_INDEX_FIELD_NAME = 2; // todo: check please
+    public static final int NEW_PRODUCT_FILE_INDEX_FIELD_PRICE = 7;
+    public static final int NEW_PRODUCT_LINE_INDEX_FIELD_PRICE = 7;
     public static final int DB_LINE_INDEX_FIELD_SKU = 0;
     public static final int DB_FILE_LINE_INDEX_FIELD_SKU = 0;
     public static final int DB_FILE_LINE_INDEX_FIELD_NAME = 1;
     public static final int DB_FILE_LINE_INDEX_FIELD_CURRENCY = 3;
-    public static final int DB_LINE_INDEX_FIELD_BRAND = 4;
+    public static final int DB_FILE_LINE_INDEX_FIELD_BRAND = 4;
     public static final int DB_FILE_LINE_INDEX_FIELD_IMAGE = 10;
-    public static String NEW_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\sokol-05.10.csv";
-    public static String EXISTING_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\sokol-11.07-rozn.xlsx.csv";
     public static final int FIRST_RESULT_INDEX = 0;
 
+
+    //todo: !!!!нужен только 1 файл с корпусной мебелью остальные просто столешницы и т.д.
+
+
+    //    public static String EXISTING_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\test old.csv";
+//    public static String NEW_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\test new.csv";
+//    public static String EXISTING_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\SV-МЕБЕЛЬ с 24.05.2022 - Корпус К list1 .csv";
+    public static String EXISTING_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\NNM-old.csv";
+    public static String NEW_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\NNM-16.08.2022.csv";
+// public static String EXISTING_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\SV-20.04-rozn list 2.csv";
+//    public static String NEW_PRODUCTS_PRICES_FILE = "C:\\work\\shop\\SV-МЕБЕЛЬ с 24.05.2022 - Кухни list2.csv";
+
+
+    //    public static final String SELECTOR_FOR_PRODUCT_IMAGE = "div .bxr-element-image a";
     public static final String SELECTOR_FOR_PRODUCT_IMAGE = "#main-photo";
     public static final String SELECTOR_FOR_CLASSIFICATION = ".bx-breadcrumb-item";
     public static final String SELECTOR_FOR_PRODUCT_URL = "div.bxr-element-image>a";
-
-//    public static final String SELECTOR_FOR_PRODUCT_IMAGE = "div .bxr-element-image a";
-
     public static final String DESCRIPTION_SELECTOR = "td.bxr-props-name";
 
     public static final String[] REDUNDANT_PRODUCT_CODE_WORDS = {};
@@ -73,11 +78,13 @@ public class Sokol extends BFTCommon {
 
     static HashMap<String, String> dbData = new HashMap<>(); //main base with old existing data
     static HashMap<String, String> oldRelationNameSKUHM = new HashMap<>();
+    static HashMap<String, String> oldRelationSKUAllInfoHM = new HashMap<>();
     static HashMap<String, String> newRelationSKUAllInfoHM = new HashMap<>();
+
+
     ArrayList<String> existingProductsWithNewPrice = new ArrayList<>();
     ArrayList<String> existingProductsWithOldPrice = new ArrayList<>();
 
-    ArrayList<String> productsWithNewPrice = new ArrayList<>();
     @Override
     public void getData() {
 
@@ -191,7 +198,7 @@ public class Sokol extends BFTCommon {
             isExists = false;
             for (String newProductDataLine : newProductData) {
                 splittedDataNew = newProductDataLine.split(";", 0);
-                if (splittedDataNew.length == 0 || splittedDataNew.length <2 )
+                if (splittedDataNew.length == 0)
                     continue;
                 if (String.valueOf(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME]).equals(splittedDataNew[2])) {
                     isExists = true;
@@ -246,7 +253,7 @@ public class Sokol extends BFTCommon {
 //            infoFromDB = dbData.get("\""+splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME]+"\"");
             infoFromDB = dbData.get(formatData(splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_NAME]));
             if (infoFromDB == null) { //it is not in the old DB. possibly were deleted from the DB, although they were in the price
-                System.err.println("old value should be in DB. However, no key in dbDataFor4Brands, maybe inappropriate item's category :" + item);
+                System.err.println("old value should be in DB. However, no key in dbDataFor4Brands:" + item);
                 //it is new though products Артикул;Номенклатура*new*;Розница
                 newInfo = newRelationSKUAllInfoHM.get(splittedData[EXISTING_PRODUCT_FILE_INDEX_FIELD_SKU]);
                 if (!newProducts.contains(newInfo))

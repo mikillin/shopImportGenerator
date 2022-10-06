@@ -27,6 +27,8 @@ public class MebelDeloService extends ImporterService {
     static HashMap<String, String> dbData = new HashMap<>(); //main base with old existing data
 
 
+
+    //todo: in the 2nd file got products, which had only another price. why? they shouldn#t be there
     public static void getProductData() {
 
         dbData = fillDBDataHSForExactBrand(BRAND);
@@ -174,7 +176,7 @@ public class MebelDeloService extends ImporterService {
                     String[] dbSplittedData = dbData.get(name).split(";", -1);
                     in.setSku(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_SKU]);
                     in.setName(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_NAME]);
-                    in.setImage(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_IMAGE]);
+                    in.setImage(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_IMAGE].replaceAll("_0", ""));
 
                     in.setPRICE_CURRENCY(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_CURRENCY]);
                     pi.setSKU(dbSplittedData[DB_FILE_LINE_INDEX_FIELD_SKU]);
@@ -210,7 +212,7 @@ public class MebelDeloService extends ImporterService {
                     String gabarity = "";
 
 
-                    String tmpImageNames = saveImageOnDisk(BASE_URL + product.select("div.fotorama>a#fotoRam").attr("href"));
+                    String tmpImageNames = saveImageOnDisk(BASE_URL + product.select("div.fotorama>a#fotoRam").attr("href"), BRAND);
 
 
                     in.setSku(String.valueOf(App.BEGIN_ARTICLE_NUMBER++));

@@ -66,6 +66,7 @@ public class CategoryProcessingService {
             "Стойка",
             "Колеса для компьютерных кресел",
             "Тумба ТВ",
+            "для теле",
             "Матрац",
             "Матрас"
 
@@ -86,7 +87,7 @@ public class CategoryProcessingService {
             add(Map.of("Полка для кровати,Полка над кроватью", new InnerClass("Мебель для спальни", "Полки для кровати")));
             add(Map.of("Комод", new InnerClass("Мебель для спальни", "Комоды")));
             add(Map.of("Тумба прикроватная,Тумбочка прикроватная", new InnerClass("Мебель для спальни", "Тумбы")));
-            add(Map.of("Шкаф,Шкаф навесной,Приставка к шкафу,Шкаф с зеркалом,Полки для шкафа,Шкаф Марта-15 Шкаф с зеркалом,Шкаф трехстворчатый,Шкаф двустворчатый,Шкаф пятистворчатый,Шкаф,Надстройка,Шкаф навесной,Полки для шкафа,Приставка к шкафу,Шкаф настенный с зеркалом,Панель с зеркалом", new InnerClass("Мебель для спальни", "Шкафы")));
+            add(Map.of("Шкаф,Шкаф навесной,Шкаф угловой,Приставка к шкафу,Шкаф с зеркалом,Полки для шкафа,Шкаф Марта-15 Шкаф с зеркалом,Шкаф трехстворчатый,Шкаф двустворчатый,Шкаф пятистворчатый,Шкаф,Надстройка,Шкаф навесной,Полки для шкафа,Приставка к шкафу,Шкаф настенный с зеркалом,Панель с зеркалом", new InnerClass("Мебель для спальни", "Шкафы")));
             add(Map.of("Шкаф-купе", new InnerClass("Мебель для спальни", "Шкафы-купе")));
             add(Map.of("Створки для Пенал,Пенал с зеркалом,Пенал,Пенал открытый,к пеналу", new InnerClass("Мебель для спальни", "Шкафы-пеналы")));
             add(Map.of("Стеллаж", new InnerClass("Мебель для спальни", "Шкафы,стеллажи")));
@@ -99,7 +100,7 @@ public class CategoryProcessingService {
             add(Map.of("Зеркало,Панель с зеркалом", new InnerClass("Мебель для прихожей", "Зеркала")));
             add(Map.of("Набор мебели для прихожей", new InnerClass("Мебель для прихожей", "Наборы мебели для прихожей")));
             add(Map.of("Вешалка", new InnerClass("Мебель для прихожей", "Вешалки")));
-            add(Map.of("Полка для обуви,Тумба для обуви,Тумба,Комплект накладок для Тумбы,", new InnerClass("Мебель для прихожей", "Тумбы")));
+            add(Map.of("Полка для обуви,Тумба для обуви,Тумба,Комплект накладок для Тумбы", new InnerClass("Мебель для прихожей", "Тумбы")));
             add(Map.of("Угловое окончание,для прихожей.*Угловое окончание ", new InnerClass("Мебель для прихожей", "Угловые окончания")));
 
 
@@ -135,7 +136,7 @@ public class CategoryProcessingService {
 
         }
     };
-public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATION_REGEX_RULES = new ArrayList<Map<String, InnerClass>>() {
+    public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATION_REGEX_RULES = new ArrayList<Map<String, InnerClass>>() {
         {
 //            add(Map.of("", new InnerClass("Мебель для спальни", "Спальные гарнитуры")));
 //            add(Map.of("", new InnerClass("Мебель для спальни", "Туалетные столики")));
@@ -143,8 +144,8 @@ public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATI
 //            add(Map.of("", new InnerClass("Мебель для спальни", "Полки для кровати")));
             add(Map.of("Комод с .*", new InnerClass("Мебель для спальни", "Комоды")));
 //            add(Map.of("", new InnerClass("Мебель для спальни", "Тумбы")));
-             add(Map.of("Мебель для гостиной / Набор мебели для гостиной .* (Зеркало)", new InnerClass("Мебель для спальни", "Зеркала")));
-//            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы")));
+            add(Map.of("Мебель для гостиной / Набор мебели для гостиной .* (Зеркало)", new InnerClass("Мебель для спальни", "Зеркала")));
+            add(Map.of("Шкаф с .*", new InnerClass("Мебель для спальни", "Шкафы")));
 //            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы-купе")));
 //            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы-пеналы")));
 //            add(Map.of("", new InnerClass("Мебель для спальни", "Шкафы,стеллажи")));
@@ -152,7 +153,7 @@ public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATI
 //            add(Map.of("", new InnerClass("Мебель для прихожей", "Прихожие")));
 //            add(Map.of("", new InnerClass("Мебель для прихожей", "Модульные прихожие")));
 //            add(Map.of("", new InnerClass("Мебель для прихожей", "Наборы мебели для прихожей")));
-//            add(Map.of("", new InnerClass("Мебель для прихожей", "Вешалки")));
+            add(Map.of("Вешкалка с .*", new InnerClass("Мебель для прихожей", "Вешалки")));
 //            add(Map.of("", new InnerClass("Мебель для прихожей", "Тумбы")));
 //            add(Map.of("", new InnerClass("Мебель для прихожей", "Угловые окончания")));
 //
@@ -175,7 +176,7 @@ public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATI
 //
 //            add(Map.of("", new InnerClass("Мебель для гостиной", "Диваны")));
 //            add(Map.of("", new InnerClass("Мебель для гостиной", "Столы журнальные")));
-//            add(Map.of("", new InnerClass("Мебель для гостиной", "Гостиные")));
+            add(Map.of("Мебель для гостиной.*Исполнение", new InnerClass("Мебель для гостиной", "Гостиные")));
 //            add(Map.of("", new InnerClass("Мебель для гостиной", "Кресла")));
 //            add(Map.of("", new InnerClass("Мебель для гостиной", "Комплекты подсветки")));
 //            add(Map.of("", new InnerClass("Мебель для гостиной", "Софы")));
@@ -386,8 +387,6 @@ public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATI
         String theFirstNameInListHasTheHighetAccuracy = "";
 
 
-
-
         //go throught regex
         //make a list of all classification names
         for (Map<String, InnerClass> entry : PRODUCT_NAME_CLASSIFICATION_REGEX_RULES) {
@@ -406,6 +405,7 @@ public static final ArrayList<Map<String, InnerClass>> PRODUCT_NAME_CLASSIFICATI
             }
         }
         //search for the first met name in the list of prioritized names and search relative categories and subcategories
+        //todo: doesn't work
         for (Map<String, InnerClass> entry : PRODUCT_NAME_CLASSIFICATION_REGEX_RULES) {
             names = (entry).entrySet().iterator().next().getKey().toUpperCase().split(",");
             for (String classificationName : names)

@@ -16,7 +16,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -68,8 +70,8 @@ public abstract class ImporterService {
         for (String lineToHide : deleteProducts) {
 
             ProductImporter pi = new ProductImporter();
-            pi.setSKU(String.valueOf(lineToHide.split(";")[DB_FILE_LINE_INDEX_FIELD_SKU]));
-            pi.setName(lineToHide.split(";")[DB_FILE_LINE_INDEX_FIELD_NAME]);
+            pi.setSKU(formatData(String.valueOf(lineToHide.split(";")[DB_FILE_LINE_INDEX_FIELD_SKU])));
+            pi.setName(formatData(lineToHide.split(";")[DB_FILE_LINE_INDEX_FIELD_NAME]));
             pi.setStatus(PRODUCT_TO_HIDE_STATUS);
 
             ImporterService.sbExportTwo.append(pi);
@@ -79,6 +81,7 @@ public abstract class ImporterService {
 
     /**
      * checks what from DB to delete. which names are not in the list of new products
+     *
      * @param newProductNames
      * @return
      */
@@ -221,17 +224,32 @@ public abstract class ImporterService {
     }
 
     public static String saveImageOnDisk(String link) {
+        return saveImageOnDisk(link, "");
+    }
+
+    public static String saveImageOnDisk(String link, String brand) {
 
 
         String imageFileName;
         URL url;
         URLConnection conn;
         imageFileName = String.valueOf(App.BEGIN_ARTICLE_NUMBER) + App.SAVED_FILES_EXTENSION;
+        String outputFolderPath = brand;
+        File directory = new File(outputFolderPath);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
 
+        outputFolderPath = brand + "/" + new SimpleDateFormat("ddMMyyyy").format(new Date());
+        directory = new File(outputFolderPath);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
 
+        String filePath = outputFolderPath + "/" + imageFileName;
         if (link.indexOf("noimage") != -1 || link.equals("")) { //local file
             try {
-                Files.copy(new FileInputStream(FILE_NO_IMAGE_PATH), Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(new FileInputStream(FILE_NO_IMAGE_PATH), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -240,7 +258,7 @@ public abstract class ImporterService {
                 link = "http:" + link;
             try {
                 try (InputStream in = new URL(link).openStream()) {
-                    Files.copy(in, Paths.get(imageFileName), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(in, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
                 }
             } catch (IOException e) {
                 System.err.println("Link : " + link);
@@ -270,10 +288,7 @@ public abstract class ImporterService {
             if (fieldBrand.indexOf("\"") != -1)
                 fieldBrand = fieldBrand.substring(1, fieldBrand.length() - 1); // without signs "
             if (brand.equals(fieldBrand)) {
-                dbData.put(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME]
-                        .replaceAll(",", ".") //todo: check
-                        .replaceAll("\"", "")
-                        .trim(), item); // HashMap <name: all info>
+                dbData.put(formatData(splittedData[DB_FILE_LINE_INDEX_FIELD_NAME]), item); // HashMap <name: all info>
             }
         }
         return dbData;
@@ -285,12 +300,26 @@ public abstract class ImporterService {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileSource))) {
             String line;
             while ((line = bufferedReader.readLine()) != null)
-                al.add(line);
+                al.add(formatData(line));
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
         return al;
     }
 
+
+    public static ArrayList<String> getAllDataFromCSVFile(String fileSource, String brand) throws FileNotFoundException {
+
+        ArrayList<String> source = getAllDataFromCSVFile(fileSource);
+        ArrayList<String> output = new ArrayList<>();
+        for (String line : source)
+            if (line.indexOf(brand) != -1)
+                output.add(line);
+        return output;
+    }
+
+    public static String formatData(String input) {
+        return input.replaceAll(",", ".").replaceAll("\"", "").trim();
+    }
 
 }

@@ -36,7 +36,7 @@ public class ProductImporter {
     private String pohozhye = "";
     private String color = "";
     private String specialKeyID = "";
-    private String htmlLink="";
+    private String htmlLink = "";
 
 
     public String getSKU() {
@@ -44,6 +44,8 @@ public class ProductImporter {
     }
 
     public void setSKU(String SKU) {
+
+        SKU.replaceAll("\"", "");
         this.SKU = SKU;
     }
 
@@ -52,6 +54,7 @@ public class ProductImporter {
     }
 
     public void setName(String name) {
+        name.replaceAll("\"", "");
         this.name = name;
     }
 
